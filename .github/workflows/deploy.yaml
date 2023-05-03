@@ -3,7 +3,8 @@ name: 'Deploy'
 on:
   push:
     branches:
-      - 'main'
+#      - 'main'
+      - '12345'
 
 env:
   BACKEND_NAME: 'spotify-backend'
