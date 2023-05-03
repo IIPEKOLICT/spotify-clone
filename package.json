@@ -2,9 +2,16 @@
   "name": "nest-lab",
   "version": "1.0.0",
   "scripts": {
-    "init": "cd server && npm i && cd ../client && npm i",
+    "init": "npm run init:server & npm run init:client",
+    "init:server": "cd server && echo '' >> .env && npm i",
+    "init:client": "cd client && echo '' >> .env && npm i",
     "server:dev": "cd server && npm run start:dev",
-    "client:dev": "cd client && npm run dev"
+    "server:prod": "cd server && npm run start:prod",
+    "client:dev": "cd client && npm run dev",
+    "client:prod": "cd client && npm run build",
+    "db": "docker-compose -f docker-compose.db.yml -p spotify-db up",
+    "dev": "docker-compose -f docker-compose.dev.yml -p spotify-dev up",
+    "prod": "docker-compose -f docker-compose.prod.yml -p spotify-prod up --build"
   },
   "devDependencies": {
     "prettier": "^2.8.8"

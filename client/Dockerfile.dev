@@ -1,0 +1,13 @@
+# Base image
+FROM node:18-alpine AS base
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json /app/package.json
+COPY package-lock.json /app/package-lock.json
+RUN npm ci --silent
+
+# Development image
+FROM base AS development
+WORKDIR /app
+COPY . /app
+CMD ["npm", "start"]
