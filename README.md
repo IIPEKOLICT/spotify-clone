@@ -4,7 +4,7 @@
 
 Backend
 
-- `GREETINGS`
+- `GREETING`
 
 Frontend
 
@@ -34,3 +34,21 @@ npm run client:dev
 ```
 
 Frontend will start at 3000 port
+
+### Start database via Docker
+
+```shell
+npm run db
+```
+
+### Start all project via Docker in DEV mode
+
+```shell
+npm run dev
+```
+
+### Start all project via Docker in PROD mode
+
+```shell
+npm run prod
+```
