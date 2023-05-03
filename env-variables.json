@@ -1,4 +1,0 @@
-{
-  "server": ["GREETINGS"],
-  "client": ["REACT_APP_BACKEND_URL"]
-}
