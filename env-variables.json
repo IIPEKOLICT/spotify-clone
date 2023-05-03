@@ -1,0 +1,4 @@
+{
+  "server": ["GREETINGS"],
+  "client": ["NEXT_PUBLIC_BACKEND_URL"]
+}

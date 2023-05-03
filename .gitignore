@@ -1,4 +1,7 @@
 dist/
 build/
+node_modules
 .vercel
+.idea
 *.env
+package-lock.json
