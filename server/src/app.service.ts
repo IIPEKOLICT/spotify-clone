@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { GREETINGS } from './constants/environment';
+import { EnvironmentService } from './modules/global/environment/environment.service';
 
 @Injectable()
 export class AppService {
+  constructor(private readonly environmentService: EnvironmentService) {}
+
   getHello(): string {
-    return GREETINGS;
+    return this.environmentService.GREETING;
   }
 }
