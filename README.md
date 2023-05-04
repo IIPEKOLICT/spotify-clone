@@ -41,6 +41,12 @@ Frontend will start at 3000 port
 npm run db
 ```
 
+### Start server via Docker (with database)
+
+```shell
+npm run server
+```
+
 ### Start all project via Docker in DEV mode
 
 ```shell
