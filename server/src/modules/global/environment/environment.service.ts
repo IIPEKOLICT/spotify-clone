@@ -12,4 +12,8 @@ export class EnvironmentService {
   get PORT(): string | number {
     return this.configService.get('PORT') ?? 5555;
   }
+
+  get DATABASE_URL(): string {
+    return this.configService.get('DATABASE_URL') ?? 'postgres://user:password@db:5432/dbname';
+  }
 }
