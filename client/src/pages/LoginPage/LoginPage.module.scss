@@ -1,0 +1,7 @@
+@use "../../styles/mixins.scss";
+
+.title {
+    @include mixins.text;
+    @include mixins.montserrat-text;
+    font-weight: 800 !important;
+}
