@@ -5,7 +5,6 @@ const swaggerConfig = new DocumentBuilder()
   .setTitle('Spotify')
   .setDescription('Spotify API description')
   .setVersion('1.0')
-  .addTag('music')
   .build();
 
 export const injectSwaggerToApp = (app: INestApplication) => {
