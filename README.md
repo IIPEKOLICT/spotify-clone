@@ -4,9 +4,11 @@
 
 Backend
 
-- `GREETING`
+- `DATABASE_URL`
 
 Frontend
+
+- `REACT_APP_BACKEND_URL`
 
 ### Clone repository
 
