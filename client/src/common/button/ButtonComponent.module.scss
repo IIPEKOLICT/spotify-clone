@@ -1,0 +1,13 @@
+.button {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    text-transform: capitalize;
+}
+
+@media screen and (max-width: 900px) {
+    .button {
+        font-size: 14px !important;
+        line-height: 16px !important;
+        text-transform: none !important;
+    }
+}
