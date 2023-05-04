@@ -15,13 +15,13 @@ export const Routes = (): ReactElement => {
       <Route
         path={pathes.LOGIN}
         element={
-          <LoginPage type="sign-in" />
+          <LoginPage type="login" />
         }
       />
       <Route
         path={pathes.REGISTRATION}
         element={
-          <LoginPage type="sign-up" />
+          <LoginPage type="registration" />
         }
       />
       <Route

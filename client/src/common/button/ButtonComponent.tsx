@@ -1,43 +1,40 @@
 import * as React from "react";
-import styles from "./ButtonComponent.module.scss";
 import { LoadingButton } from "@mui/lab";
 
 interface IProps {
     name: string,
     width: string,
     mobileWidth?: string,
-    mobileHeight?: string,
     height: string,
     outlined: boolean,
     loading?: boolean,
-    color?: boolean,
-    // type: string,
-    onSubmit: (value: React.ChangeEvent<HTMLInputElement>) => void,
+    black?: boolean,
+    onSubmit: () => void,
 };
 
 export const ButtonComponent: React.FC<IProps> = (props: IProps) => {
-    const { name, onSubmit, width, height, outlined, mobileWidth, mobileHeight, loading, color } = props;
-    const click = (e: any) => {
-        onSubmit(e);
-    };
-    const getColor = () => {
-        return !color ? "var(--green-color) !important" : "white !important";
+    const { name, onSubmit, width, height, outlined, mobileWidth, loading, black } = props;
+    const submitForm = (): void => {
+        onSubmit();
     };
     return(
         <LoadingButton
-            onClick={click}
+            onClick={submitForm}
             sx={{
-                borderRadius: "8px",
-                color: `${!outlined ? "white !important" : getColor()}`,
+                borderRadius: "15px",
+                padding: "0",
                 boxShadow: "none",
                 width: { xs: `${mobileWidth}`, sm: `${width}` },
-                height: { xs: `${mobileHeight}`, sm: `${height}` },
-                textTransform: `${color && "none !important"}`
+                height: `${height}`,
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: "600",
+                fontStyle: "normal",
+                fontSize: { xs: "14px", sm: "18px" },
             }}
-            className={styles.button}
             variant={`${!outlined ? "contained" : "outlined"}`}
             disabled={loading}
             loading={loading}
+            color={`${black ? "black" : "green"}`}
         >{name}</LoadingButton>
     );
 };

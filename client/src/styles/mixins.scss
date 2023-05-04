@@ -1,0 +1,10 @@
+@mixin text {
+    font-weight: 400;
+    font-style: normal;
+}
+@mixin montserrat-text {
+    font-family: Montserrat, sans-serif;
+}
+@mixin russo-text {
+    font-family: Russo One, sans-serif;
+}

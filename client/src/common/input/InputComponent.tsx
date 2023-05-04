@@ -1,4 +1,4 @@
-import { Box, TextField, styled } from "@mui/material";
+import { TextField } from "@mui/material";
 import { Ref, forwardRef, useState } from "react";
 import { PasswordIcon } from "../password/PasswordIcon";
 
@@ -9,37 +9,35 @@ interface IProps {
     disabled?: boolean,
 };
 
-const CssTextField = styled(TextField)({
-    "& .MuiOutlinedInput-root": {
-        "height" : "48px",
-        "padding": "14px 0px",
-        "backgroundColor": "white",
-        "borderRadius": "8px",
-        "& fieldset": {
-            borderColor: `var(--main-color)`,
-        },
-        "&:hover fieldset": {
-            borderColor: `var(--green-color)`,
-        },
-        "&.Mui-focused fieldset": {
-            borderColor: `var(--green-color)`,
-        },
-    },
-});
-
 export const InputComponent = forwardRef<Ref<any>, IProps>((props, ref) => {
     const { label, onChange, value, disabled } = props;
     const [showPassword, setShowPassword] = useState(false);
     return (
-        <CssTextField
-            sx={{ width: "100%" }}
+        <TextField
+            sx={{
+                width: "100%",
+                background: "white",
+                fieldset: { display: "none" },
+                borderRadius: "15px",
+                ".Mui-focused": {
+                    border: "1px solid var(--green-color)",
+                    borderRadius: "15px",
+                },
+                ".MuiInputBase-root": {
+                    borderRadius: "15px",
+                    fontFamily: "Montserrat, sans-serif",
+                    fontWeight: "600",
+                    fontStyle: "normal",
+                    fontSize: { xs: "14px", sm: "18px" },
+                },
+            }}
             placeholder={label}
-            size="small"
             onChange={onChange}
             value={value}
             type={!showPassword ? "text" : "password"}
-            disabled={disabled}
             autoComplete="on"
+            autoFocus={false}
+            disabled={disabled}
             InputProps={{
                 ...props,
                 endAdornment: (
