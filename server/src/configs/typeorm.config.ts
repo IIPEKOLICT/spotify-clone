@@ -1,6 +1,6 @@
-import { EnvironmentService } from '../modules/global/environment/environment.service';
+import { EnvironmentService } from '../app/global/environment/environment.service';
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { EnvironmentModule } from '../modules/global/environment/environment.module';
+import { EnvironmentModule } from '../app/global/environment/environment.module';
 
 const typeormModuleOptionsFactory = (environmentService: EnvironmentService): TypeOrmModuleOptions => {
   return {
