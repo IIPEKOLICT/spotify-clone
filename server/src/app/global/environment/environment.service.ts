@@ -12,4 +12,12 @@ export class EnvironmentService {
   get DATABASE_URL(): string {
     return this.configService.get('DATABASE_URL') ?? 'postgres://user:password@db:5432/dbname';
   }
+
+  get JWT_SECRET(): string {
+    return this.configService.get('JWT_SECRET') ?? '12345';
+  }
+
+  get BCRYPT_SALT(): number {
+    return this.configService.get('BCRYPT_SALT') ?? 5;
+  }
 }
