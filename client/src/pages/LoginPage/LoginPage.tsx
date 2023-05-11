@@ -18,6 +18,7 @@ export const LoginPage: React.FC<IProps> = (props: IProps) => {
                 padding: "20px",
                 height: "100%",
                 width: "100%",
+                textAlign: "center",
             }}
         >
             <Box sx={{ fontSize: { xs: "18px", sm: "24px" }, marginBottom: "40px" }}>

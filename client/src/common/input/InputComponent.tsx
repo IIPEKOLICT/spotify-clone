@@ -41,7 +41,7 @@ export const InputComponent = forwardRef<Ref<any>, IProps>((props, ref) => {
             InputProps={{
                 ...props,
                 endAdornment: (
-                    label === "Пароль" && <PasswordIcon isShow={showPassword} changeIsShow={setShowPassword} />
+                    label === "Password" && <PasswordIcon isShow={showPassword} changeIsShow={setShowPassword} />
                 ),
             }}
         />
