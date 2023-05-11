@@ -1,0 +1,104 @@
+version: '3'
+
+services:
+  db:
+    profiles:
+      - 'db'
+      - 'server'
+      - 'dev'
+      - 'prod'
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dbname
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  server_dev:
+    profiles:
+      - 'server'
+      - 'dev'
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./server:/app
+    env_file:
+      - ./server/.env
+    environment:
+      NODE_ENV: development
+      PORT: 8000
+      DATABASE_URL: postgres://user:password@db:5432/dbname
+    links:
+      - db
+    depends_on:
+      - db
+
+  server_prod:
+    profiles:
+      - 'prod'
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./server:/app
+    env_file:
+      - ./server/.env
+    environment:
+      NODE_ENV: production
+      PORT: 8000
+      DATABASE_URL: postgres://user:password@db:5432/dbname
+    links:
+      - db
+    depends_on:
+      - db
+
+  client_dev:
+    profiles:
+      - 'client'
+      - 'dev'
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+    env_file:
+      - ./client/.env
+    environment:
+      CI: true
+      PORT: 3000
+      NODE_ENV: development
+      REACT_APP_API_URL: http://localhost:8000
+
+  client_prod:
+    profiles:
+      - 'prod'
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:80"
+    volumes:
+      - ./client:/app
+    env_file:
+      - ./client/.env
+    environment:
+      CI: true
+      NODE_ENV: production
+      REACT_APP_API_URL: http://localhost:8000
+
+volumes:
+  db-data:

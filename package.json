@@ -9,10 +9,11 @@
     "server:prod": "cd server && npm run start:prod",
     "client:dev": "cd client && npm run dev",
     "client:prod": "cd client && npm run build",
-    "db": "docker-compose -f docker-compose.db.yml -p spotify-db up",
-    "server": "docker-compose -f docker-compose.server.yml -p spotify-server up",
-    "dev": "docker-compose -f docker-compose.dev.yml -p spotify-dev up",
-    "prod": "docker-compose -f docker-compose.prod.yml -p spotify-prod up --build"
+    "db": "docker-compose -p spotify-db --profile db up",
+    "client": "docker-compose -p spotify-client --profile client up --build",
+    "server": "docker-compose -p spotify-server --profile server up --build",
+    "dev": "docker-compose -p spotify-dev --profile dev up --build",
+    "prod": "docker-compose -p spotify-prod --profile prod up --build"
   },
   "devDependencies": {
     "prettier": "^2.8.8"
