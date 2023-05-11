@@ -4,6 +4,8 @@ import { UserEntity } from '../user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { CryptographyService } from '../global/cryptografy/cryptography.service';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
+import { Request } from 'express';
+import { HTTP_HEADER } from '../../constants/enums';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +14,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly cryptographyService: CryptographyService,
   ) {}
+
+  tryGetJwtTokenFromRequestCookies(request: Request): string | null {
+    return request.cookies[HTTP_HEADER.AUTHORIZATION] ?? null;
+  }
 
   async tryGetUserViaCredentials(email: string, password: string): Promise<UserEntity | undefined> {
     const user: UserEntity = await this.userService.getOne({ email: email });
