@@ -35,7 +35,7 @@ export abstract class CrudService<Entity extends { id: number }> {
   }
 
   async create(entity: Partial<Entity>): Promise<Entity> {
-    return this.repository.create(entity as DeepPartial<Entity>);
+    return this.repository.save(entity as DeepPartial<Entity>);
   }
 
   async createMany(entities: Partial<Entity>[]): Promise<Entity[]> {
