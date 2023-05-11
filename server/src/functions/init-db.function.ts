@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { RoleService } from '../app/user/services/role.service';
 import { UserService } from '../app/user/services/user.service';
 import { RoleEntity } from '../app/user/entities/role.entity';
-import { PERMISSION } from '../constants/enums';
+import { Permission } from '../constants/enums';
 import { UserEntity } from '../app/user/entities/user.entity';
 
 export const initDatabase = async (app: INestApplication) => {
@@ -19,21 +19,21 @@ export const initDatabase = async (app: INestApplication) => {
   const roles: Partial<RoleEntity>[] = [
     {
       name: 'user',
-      [PERMISSION.CAN_ADD_SONGS]: false,
-      [PERMISSION.CAN_ADD_PLAYLISTS]: true,
-      [PERMISSION.CAN_OPEN_ADMIN_PANEL]: false,
+      [Permission.CAN_ADD_SONGS]: false,
+      [Permission.CAN_ADD_PLAYLISTS]: true,
+      [Permission.CAN_OPEN_ADMIN_PANEL]: false,
     },
     {
       name: 'singer',
-      [PERMISSION.CAN_ADD_SONGS]: true,
-      [PERMISSION.CAN_ADD_PLAYLISTS]: true,
-      [PERMISSION.CAN_OPEN_ADMIN_PANEL]: false,
+      [Permission.CAN_ADD_SONGS]: true,
+      [Permission.CAN_ADD_PLAYLISTS]: true,
+      [Permission.CAN_OPEN_ADMIN_PANEL]: false,
     },
     {
       name: 'admin',
-      [PERMISSION.CAN_ADD_SONGS]: true,
-      [PERMISSION.CAN_ADD_PLAYLISTS]: true,
-      [PERMISSION.CAN_OPEN_ADMIN_PANEL]: true,
+      [Permission.CAN_ADD_SONGS]: true,
+      [Permission.CAN_ADD_PLAYLISTS]: true,
+      [Permission.CAN_OPEN_ADMIN_PANEL]: true,
     },
   ];
 

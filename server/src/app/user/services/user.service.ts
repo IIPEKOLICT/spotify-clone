@@ -4,7 +4,7 @@ import { UserEntity } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CrudService } from '../../../shared/services/crud.service';
 import { CryptographyService } from '../../global/cryptografy/cryptography.service';
-import { ENTITY } from '../../../constants/enums';
+import { EntityName } from '../../../constants/enums';
 
 @Injectable()
 export class UserService extends CrudService<UserEntity> {
@@ -12,7 +12,7 @@ export class UserService extends CrudService<UserEntity> {
     @InjectRepository(UserEntity) repository: Repository<UserEntity>,
     private readonly cryptographyService: CryptographyService,
   ) {
-    super(repository, ENTITY.USER);
+    super(repository, EntityName.USER);
   }
 
   async create(entity: Partial<UserEntity>): Promise<UserEntity> {

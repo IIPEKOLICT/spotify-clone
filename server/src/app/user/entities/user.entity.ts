@@ -1,9 +1,9 @@
 import { JoinColumn, Column, Entity, ManyToOne, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-import { ENTITY } from '../../../constants/enums';
+import { EntityName } from '../../../constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { RoleEntity } from './role.entity';
 
-@Entity(ENTITY.USER)
+@Entity(EntityName.USER)
 export class UserEntity extends BaseEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()

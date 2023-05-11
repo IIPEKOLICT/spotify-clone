@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
-import { API_OPERATION, ENDPOINT, HTTP_HEADER } from '../../constants/enums';
+import { ApiOperationDescription, Endpoint } from '../../constants/enums';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
@@ -12,8 +12,8 @@ import { Response } from 'express';
 import { RoleEntity } from '../user/entities/role.entity';
 import { RoleService } from '../user/services/role.service';
 
-@ApiTags(ENDPOINT.AUTH)
-@Controller(ENDPOINT.AUTH)
+@ApiTags(Endpoint.AUTH)
+@Controller(Endpoint.AUTH)
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -21,26 +21,26 @@ export class AuthController {
     private readonly roleService: RoleService,
   ) {}
 
-  @ApiOperation({ summary: API_OPERATION.AUTH_REFRESH_TOKEN })
+  @ApiOperation({ summary: ApiOperationDescription.AUTH_REFRESH_TOKEN })
   @ApiResponse({ type: UserEntity })
   @Get('refresh')
   async updateToken(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
-    response.cookie(HTTP_HEADER.AUTHORIZATION, this.authService.generateToken(user));
+    this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return user;
   }
 
-  @ApiOperation({ summary: API_OPERATION.AUTH_LOGIN })
+  @ApiOperation({ summary: ApiOperationDescription.AUTH_LOGIN })
   @ApiResponse({ type: UserEntity })
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
-    response.cookie(HTTP_HEADER.AUTHORIZATION, this.authService.generateToken(user));
+    this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return user;
   }
 
-  @ApiOperation({ summary: API_OPERATION.AUTH_REGISTER })
+  @ApiOperation({ summary: ApiOperationDescription.AUTH_REGISTER })
   @ApiResponse({ type: UserEntity })
   @Public()
   @Post('register')
@@ -49,7 +49,7 @@ export class AuthController {
     const role: RoleEntity = await this.roleService.getOne({ name: 'user' });
     const user: UserEntity = await this.userService.create({ ...dto, role });
 
-    response.cookie(HTTP_HEADER.AUTHORIZATION, this.authService.generateToken(user));
+    this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return user;
   }
 }
