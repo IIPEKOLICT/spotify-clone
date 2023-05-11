@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   const PORT = app.get(EnvironmentService).PORT;
 
+  app.enableCors({ origin: 'http://localhost:*' });
   injectSwaggerToApp(app);
 
   await app.listen(PORT, () => {

@@ -1,5 +1,5 @@
 {
-  "name": "nest-lab",
+  "name": "spotify",
   "version": "1.0.0",
   "scripts": {
     "init": "npm run init:server & npm run init:client",
@@ -7,7 +7,7 @@
     "init:client": "cd client && echo '' >> .env && npm i",
     "server:dev": "cd server && npm run start:dev",
     "server:prod": "cd server && npm run start:prod",
-    "client:dev": "cd client && npm run dev",
+    "client:dev": "cd client && npm run start",
     "client:prod": "cd client && npm run build",
     "db": "docker-compose -p spotify-db --profile db up",
     "client": "docker-compose -p spotify-client --profile client up --build",
