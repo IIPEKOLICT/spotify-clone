@@ -18,21 +18,18 @@ export const initDatabase = async (app: INestApplication) => {
 
   const roles: Partial<RoleEntity>[] = [
     {
-      id: 1,
       name: 'user',
       [PERMISSION.CAN_ADD_SONGS]: false,
       [PERMISSION.CAN_ADD_PLAYLISTS]: true,
       [PERMISSION.CAN_OPEN_ADMIN_PANEL]: false,
     },
     {
-      id: 2,
       name: 'singer',
       [PERMISSION.CAN_ADD_SONGS]: true,
       [PERMISSION.CAN_ADD_PLAYLISTS]: true,
       [PERMISSION.CAN_OPEN_ADMIN_PANEL]: false,
     },
     {
-      id: 3,
       name: 'admin',
       [PERMISSION.CAN_ADD_SONGS]: true,
       [PERMISSION.CAN_ADD_PLAYLISTS]: true,
@@ -48,19 +45,16 @@ export const initDatabase = async (app: INestApplication) => {
 
   const users: Partial<UserEntity>[] = [
     {
-      id: 1,
       email: 'user@gmail.com',
       password: '12345',
       role: userRole,
     },
     {
-      id: 2,
       email: 'singer@gmail.com',
       password: '12345',
       role: singerRole,
     },
     {
-      id: 3,
       email: 'admin@gmail.com',
       password: '12345',
       role: adminRole,

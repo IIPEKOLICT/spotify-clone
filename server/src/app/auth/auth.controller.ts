@@ -25,7 +25,7 @@ export class AuthController {
   @ApiResponse({ type: UserEntity })
   @Get('refresh')
   async updateToken(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
-    response.cookie(HTTP_HEADER.AUTHORIZATION, `Bearer ${this.authService.generateToken(user)}`);
+    response.cookie(HTTP_HEADER.AUTHORIZATION, this.authService.generateToken(user));
     return user;
   }
 
@@ -36,7 +36,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
-    response.cookie(HTTP_HEADER.AUTHORIZATION, `Bearer ${this.authService.generateToken(user)}`);
+    response.cookie(HTTP_HEADER.AUTHORIZATION, this.authService.generateToken(user));
     return user;
   }
 
@@ -49,7 +49,7 @@ export class AuthController {
     const role: RoleEntity = await this.roleService.getOne({ name: 'user' });
     const user: UserEntity = await this.userService.create({ ...dto, role });
 
-    response.cookie(HTTP_HEADER.AUTHORIZATION, `Bearer ${this.authService.generateToken(user)}`);
+    response.cookie(HTTP_HEADER.AUTHORIZATION, this.authService.generateToken(user));
     return user;
   }
 }
