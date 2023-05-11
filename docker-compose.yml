@@ -32,9 +32,9 @@ services:
     env_file:
       - ./server/.env
     environment:
-      NODE_ENV: development
-      PORT: 8000
-      DATABASE_URL: postgres://user:password@db:5432/dbname
+      NODE_ENV: 'development'
+      PORT: '8000'
+      DATABASE_URL: 'postgres://user:password@db:5432/dbname'
     links:
       - db
     depends_on:
@@ -54,9 +54,9 @@ services:
     env_file:
       - ./server/.env
     environment:
-      NODE_ENV: production
-      PORT: 8000
-      DATABASE_URL: postgres://user:password@db:5432/dbname
+      NODE_ENV: 'production'
+      PORT: '8000'
+      DATABASE_URL: 'postgres://user:password@db:5432/dbname'
     links:
       - db
     depends_on:
@@ -77,10 +77,10 @@ services:
     env_file:
       - ./client/.env
     environment:
-      CI: true
-      PORT: 3000
-      NODE_ENV: development
-      REACT_APP_API_URL: http://localhost:8000
+      CI: 'true'
+      PORT: '3000'
+      NODE_ENV: 'development'
+      REACT_APP_API_URL: 'http://localhost:8000'
 
   client_prod:
     profiles:
@@ -96,9 +96,9 @@ services:
     env_file:
       - ./client/.env
     environment:
-      CI: true
-      NODE_ENV: production
-      REACT_APP_API_URL: http://localhost:8000
+      CI: 'true'
+      NODE_ENV: 'production'
+      REACT_APP_API_URL: 'http://localhost:8000'
 
 volumes:
   db-data:
