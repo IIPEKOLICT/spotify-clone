@@ -1,35 +1,15 @@
-import { ReactElement } from "react";
-import { Route, Routes as Switch } from "react-router-dom";
-import { HomePage, LoginPage } from "../pages";
-import { pathes } from "./pathes";
+import { ReactElement } from 'react';
+import { Route, Routes as Switch } from 'react-router-dom';
+import { HomePage, LoginPage } from '../pages';
+import { AuthType, RoutePath } from '../constants/enums';
 
 export const Routes = (): ReactElement => {
   return (
     <Switch>
-      <Route
-        path={pathes.HOME}
-        element={
-          <HomePage/>
-        }
-      />
-      <Route
-        path={pathes.LOGIN}
-        element={
-          <LoginPage type="login" />
-        }
-      />
-      <Route
-        path={pathes.REGISTRATION}
-        element={
-          <LoginPage type="registration" />
-        }
-      />
-      <Route
-        path={pathes.DEFAULT}
-        element={
-          <HomePage />
-        }
-      />
+      <Route path={RoutePath.HOME} element={<HomePage />} />
+      <Route path={RoutePath.LOGIN} element={<LoginPage type={AuthType.LOGIN} />} />
+      <Route path={RoutePath.REGISTRATION} element={<LoginPage type={AuthType.REGISTRATION} />} />
+      <Route path={RoutePath.DEFAULT} element={<HomePage />} />
     </Switch>
   );
 };
