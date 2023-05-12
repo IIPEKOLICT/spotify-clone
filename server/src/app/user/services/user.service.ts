@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CrudService } from '../../../shared/services/crud.service';
@@ -15,17 +15,17 @@ export class UserService extends CrudService<UserEntity> {
     super(repository, EntityName.USER);
   }
 
-  async create(entity: Partial<UserEntity>): Promise<UserEntity> {
+  async create(entity: DeepPartial<UserEntity>): Promise<UserEntity> {
     return super.create({
       ...entity,
       password: await this.cryptographyService.hash(entity.password),
     });
   }
 
-  async createMany(entities: Partial<UserEntity>[]): Promise<UserEntity[]> {
+  async createMany(entities: DeepPartial<UserEntity>[]): Promise<UserEntity[]> {
     return super.createMany(
       await Promise.all(
-        entities.map(async (entity: Partial<UserEntity>) => {
+        entities.map(async (entity: DeepPartial<UserEntity>) => {
           return {
             ...entity,
             password: await this.cryptographyService.hash(entity.password),

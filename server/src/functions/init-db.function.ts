@@ -4,6 +4,7 @@ import { UserService } from '../app/user/services/user.service';
 import { RoleEntity } from '../app/user/entities/role.entity';
 import { Permission } from '../constants/enums';
 import { UserEntity } from '../app/user/entities/user.entity';
+import { DeepPartial } from 'typeorm';
 
 export const initDatabase = async (app: INestApplication) => {
   const roleService = app.get(RoleService);
@@ -16,7 +17,7 @@ export const initDatabase = async (app: INestApplication) => {
     return;
   }
 
-  const roles: Partial<RoleEntity>[] = [
+  const roles: DeepPartial<RoleEntity>[] = [
     {
       name: 'user',
       [Permission.CAN_ADD_SONGS]: false,
@@ -43,7 +44,7 @@ export const initDatabase = async (app: INestApplication) => {
   const singerRole = await roleService.getOne({ name: 'singer' });
   const adminRole = await roleService.getOne({ name: 'admin' });
 
-  const users: Partial<UserEntity>[] = [
+  const users: DeepPartial<UserEntity>[] = [
     {
       email: 'user@gmail.com',
       password: '12345',

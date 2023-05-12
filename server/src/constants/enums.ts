@@ -41,4 +41,5 @@ export enum HttpHeader {
 export enum ErrorMessage {
   UNKNOWN_EXCEPTION = 'Internal server exception',
   UNAUTHORIZED = 'Unauthorized',
+  BAD_REQUEST = 'Bad request',
 }

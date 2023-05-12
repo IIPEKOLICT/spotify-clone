@@ -11,6 +11,7 @@ import { User } from '../user/decorators/user.decorator';
 import { Response } from 'express';
 import { RoleEntity } from '../user/entities/role.entity';
 import { RoleService } from '../user/services/role.service';
+import { BadRequestError } from '../../errors/bad-request.error';
 
 @ApiTags(Endpoint.AUTH)
 @Controller(Endpoint.AUTH)
@@ -46,6 +47,12 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   async register(@Res({ passthrough: true }) response: Response, @Body() dto: CreateUserDto): Promise<UserEntity> {
+    const isExistsWithThisEmail: boolean = await this.userService.isExists({ email: dto.email });
+
+    if (isExistsWithThisEmail) {
+      throw new BadRequestError('User with this email already exists');
+    }
+
     const role: RoleEntity = await this.roleService.getOne({ name: 'user' });
     const user: UserEntity = await this.userService.create({ ...dto, role });
 
