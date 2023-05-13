@@ -1,11 +1,15 @@
-import { DeepPartial, FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { EntityNotFoundError } from '../../errors/entity-not-found.error';
 
 export abstract class CrudService<Entity extends { id: number }> {
   protected constructor(protected readonly repository: Repository<Entity>, protected readonly entityName: string) {}
 
-  async count(filter?: Partial<Entity>): Promise<number> {
-    return this.repository.count(filter as FindManyOptions<Entity>);
+  async isExists(filter?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<boolean> {
+    return this.repository.exist({ where: filter });
+  }
+
+  async count(filter?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<number> {
+    return this.repository.count({ where: filter });
   }
 
   async getAll(): Promise<Entity[]> {
@@ -13,15 +17,15 @@ export abstract class CrudService<Entity extends { id: number }> {
   }
 
   async getById(id: number): Promise<Entity> {
-    return this.getOne({ id } as Partial<Entity>);
+    return this.getOne({ id } as FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]);
   }
 
   async getByIdOrNull(id: number): Promise<Entity | null> {
-    return this.getOneOrNull({ id } as Partial<Entity>);
+    return this.getOneOrNull({ id } as FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]);
   }
 
-  async getOne(filter: Partial<Entity>): Promise<Entity> {
-    const entity: Entity | undefined = await this.repository.findOneBy(filter as FindOptionsWhere<Entity>);
+  async getOne(filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity> {
+    const entity: Entity | undefined = await this.repository.findOneBy(filter);
 
     if (!entity) {
       throw new EntityNotFoundError(this.entityName);
@@ -30,16 +34,16 @@ export abstract class CrudService<Entity extends { id: number }> {
     return entity;
   }
 
-  async getOneOrNull(filter: Partial<Entity>): Promise<Entity | null> {
-    return (await this.repository.findOneBy(filter as FindOptionsWhere<Entity>)) ?? null;
+  async getOneOrNull(filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity | null> {
+    return (await this.repository.findOneBy(filter)) ?? null;
   }
 
-  async create(entity: Partial<Entity>): Promise<Entity> {
-    return this.repository.save(entity as DeepPartial<Entity>);
+  async create(entity: DeepPartial<Entity>): Promise<Entity> {
+    return this.repository.save(entity);
   }
 
-  async createMany(entities: Partial<Entity>[]): Promise<Entity[]> {
-    return this.repository.save(entities as Entity[]);
+  async createMany(entities: DeepPartial<Entity>[]): Promise<Entity[]> {
+    return this.repository.save(entities);
   }
 
   async updateById(id: number, dto: DeepPartial<Entity>): Promise<Entity> {
@@ -52,8 +56,8 @@ export abstract class CrudService<Entity extends { id: number }> {
     return this.getByIdOrNull(id);
   }
 
-  async updateMany(filter: Partial<Entity>, dto: Partial<Entity>) {
-    await this.repository.update(filter as FindOptionsWhere<Entity>, dto as any);
+  async updateMany(filter: FindOptionsWhere<Entity>, dto: Partial<Entity>) {
+    await this.repository.update(filter, dto as any);
   }
 
   async deleteById(id: number): Promise<void> {

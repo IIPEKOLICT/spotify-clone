@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
-import { ENDPOINT } from '../../../constants/enums';
+import { Endpoint } from '../../../constants/enums';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags(ENDPOINT.ROLES)
-@Controller(ENDPOINT.ROLES)
+@ApiTags(Endpoint.ROLES)
+@Controller(Endpoint.ROLES)
 export class RoleController {}

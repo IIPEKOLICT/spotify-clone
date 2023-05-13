@@ -4,8 +4,8 @@ import { UserEntity } from '../user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { CryptographyService } from '../global/cryptografy/cryptography.service';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
-import { Request } from 'express';
-import { HTTP_HEADER } from '../../constants/enums';
+import { Request, Response } from 'express';
+import { Cookie } from '../../constants/enums';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +16,16 @@ export class AuthService {
   ) {}
 
   tryGetJwtTokenFromRequestCookies(request: Request): string | null {
-    return request.cookies[HTTP_HEADER.AUTHORIZATION] ?? null;
+    return request.cookies[Cookie.ACCESS_TOKEN] ?? null;
+  }
+
+  private generateToken(user: UserEntity): string {
+    const { email, id, role } = user;
+    return this.jwtService.sign({ email, id, role });
+  }
+
+  injectJwtTokenIntoResponseCookies(response: Response, user: UserEntity) {
+    response.cookie(Cookie.ACCESS_TOKEN, this.generateToken(user));
   }
 
   async tryGetUserViaCredentials(email: string, password: string): Promise<UserEntity | undefined> {
@@ -37,10 +46,5 @@ export class AuthService {
     }
 
     return user;
-  }
-
-  generateToken(user: UserEntity): string {
-    const { email, id, role } = user;
-    return this.jwtService.sign({ email, id, role });
   }
 }
