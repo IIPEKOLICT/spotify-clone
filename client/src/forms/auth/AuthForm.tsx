@@ -5,7 +5,7 @@ import { ButtonComponent } from '../../common/button/ButtonComponent';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthForm.module.scss';
 import { authAPI } from '../../services/AuthServices';
-import { FC, ChangeEvent } from 'react';
+import { FC, ChangeEvent, useEffect } from 'react';
 import { AuthType } from '../../constants/enums';
 
 interface IProps {
@@ -20,11 +20,15 @@ type Inputs = {
   onSubmit: (value: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const AuthForm: FC<IProps> = ({ type }: IProps) => {
+export const AuthForm: FC<IProps> = ({ type }) => {
   const { control, handleSubmit } = useForm<Inputs>();
 
-  const [signIn, { data: data_in, isSuccess: success_in, isLoading: loading_in }] = authAPI.useSignInMutation();
-  const [signUp, { data: data_up, isSuccess: success_up, isLoading: loading_up }] = authAPI.useSignUpMutation();
+  const [signIn, { isSuccess: success_in, isLoading: loading_in }] = authAPI.useSignInMutation();
+  const [signUp, { isSuccess: success_up, isLoading: loading_up }] = authAPI.useSignUpMutation();
+
+  useEffect(() => {
+    (success_up || success_in) && window.location.reload();
+  }, [success_in, success_up]);
 
   const onSubmitLogin: SubmitHandler<Inputs> = ({ onSubmit, ...fields }) => signIn(fields);
   const onSubmitRegistration: SubmitHandler<Inputs> = ({ onSubmit, ...fields }) => signUp(fields);
@@ -88,6 +92,7 @@ export const AuthForm: FC<IProps> = ({ type }: IProps) => {
           height="44px"
           name={type === AuthType.LOGIN ? 'Login' : 'Registration'}
           onSubmit={handleSubmit(type === AuthType.LOGIN ? onSubmitLogin : onSubmitRegistration)}
+          loading={loading_in || loading_up}
         />
       </form>
       <Box
@@ -110,7 +115,6 @@ export const AuthForm: FC<IProps> = ({ type }: IProps) => {
             name={type === AuthType.LOGIN ? 'Registration' : 'Login'}
             black={true}
             onSubmit={clickRedirect}
-            loading={loading_in || loading_up}
           />
         </Box>
       </Box>
