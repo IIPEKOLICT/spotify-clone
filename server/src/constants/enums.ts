@@ -24,6 +24,8 @@ export enum ApiOperationDescription {
   USERS_GET_CURRENT = 'get current user info',
   USERS_UPDATE_CURRENT = 'update current user',
   USERS_DELETE_CURRENT = 'delete current user',
+  USERS_UPDATE_CURRENT_PICTURE = 'update current user profile picture',
+  USERS_DELETE_CURRENT_PICTURE = 'delete current user profile picture',
   USERS_DELETE_USER = 'delete user by id (admin)',
   USERS_BAN_USER = 'ban / unban user by id (admin)',
 }

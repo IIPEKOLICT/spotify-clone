@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiOperationDescription, Endpoint } from '../../constants/enums';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
@@ -8,11 +19,13 @@ import { User } from './decorators/user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DefaultResponseDto } from '../../shared/dto/default-response.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { StorageService } from '../storage/storage.service';
 
 @ApiTags(Endpoint.USERS)
 @Controller(Endpoint.USERS)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService, private readonly storageService: StorageService) {}
 
   @ApiOperation({ description: ApiOperationDescription.USERS_GET_ALL })
   @ApiResponse({ type: [UserEntity] })
@@ -42,6 +55,23 @@ export class UserController {
   @Patch('current')
   async updateCurrent(@User() user: UserEntity, @Body() dto: UpdateUserDto): Promise<UserEntity> {
     return this.userService.updateById(user.id, dto);
+  }
+
+  @ApiOperation({ description: ApiOperationDescription.USERS_UPDATE_CURRENT_PICTURE })
+  @ApiResponse({ type: UserEntity })
+  @UseInterceptors(FileInterceptor('picture'))
+  @Patch('current/picture')
+  async updateCurrentPicture(@User() user: UserEntity, @UploadedFile() file: Express.Multer.File): Promise<UserEntity> {
+    const link: string = await this.storageService.saveProfilePicture(user.id, file);
+    return this.userService.updateById(user.id, { profilePicture: link });
+  }
+
+  @ApiOperation({ description: ApiOperationDescription.USERS_DELETE_CURRENT_PICTURE })
+  @ApiResponse({ type: UserEntity })
+  @Delete('current/picture')
+  async deleteCurrentPicture(@User() user: UserEntity): Promise<UserEntity> {
+    await this.storageService.removeProfilePicture(user.id);
+    return this.userService.updateById(user.id, { profilePicture: null });
   }
 
   @ApiOperation({ description: ApiOperationDescription.USERS_DELETE_CURRENT })
