@@ -1,7 +1,6 @@
-import { JoinColumn, Column, Entity, ManyToOne, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-import { EntityName } from '../../../constants/enums';
+import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+import { EntityName } from '../../constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
-import { RoleEntity } from './role.entity';
 
 @Entity(EntityName.USER)
 export class UserEntity extends BaseEntity {
@@ -29,7 +28,7 @@ export class UserEntity extends BaseEntity {
   @Column({ name: 'profile_picture', nullable: true })
   profilePicture: string | null;
 
-  @ManyToOne(() => RoleEntity, { cascade: true, eager: true })
-  @JoinColumn()
-  role: RoleEntity;
+  @ApiProperty()
+  @Column({ default: false })
+  isAdmin: boolean;
 }

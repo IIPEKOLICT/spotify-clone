@@ -1,23 +1,15 @@
 export enum Endpoint {
   USERS = 'users',
   AUTH = 'auth',
-  ROLES = 'roles',
 }
 
 export enum EntityName {
   USER = 'user',
-  ROLE = 'role',
 }
 
 export enum MetadataKey {
   IS_PUBLIC_ENDPOINT = 'is-public-endpoint',
-  REQUIRED_PERMISSIONS = 'required-permissions',
-}
-
-export enum Permission {
-  CAN_ADD_SONGS = 'canAddSongs',
-  CAN_ADD_PLAYLISTS = 'canAddPlaylists',
-  CAN_OPEN_ADMIN_PANEL = 'canOpenAdminPanel',
+  IS_ADMIN_ENDPOINT = 'is-admin-endpoint',
 }
 
 export enum ApiOperationDescription {

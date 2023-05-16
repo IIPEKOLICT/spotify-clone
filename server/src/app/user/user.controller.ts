@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOperationDescription, Endpoint, Permission } from '../../../constants/enums';
-import { UserService } from '../services/user.service';
-import { UserEntity } from '../entities/user.entity';
+import { ApiOperationDescription, Endpoint } from '../../constants/enums';
+import { UserService } from './user.service';
+import { UserEntity } from './user.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RequiredPermissions } from '../../auth/decorators/reuired-permissions.decorator';
+import { AdminEndpoint } from '../auth/decorators/admin-endpoint.decorator';
 
 @ApiTags(Endpoint.USERS)
 @Controller(Endpoint.USERS)
@@ -12,7 +12,7 @@ export class UserController {
 
   @ApiOperation({ description: ApiOperationDescription.USERS_GET_ALL })
   @ApiResponse({ type: [UserEntity] })
-  @RequiredPermissions(Permission.CAN_OPEN_ADMIN_PANEL)
+  @AdminEndpoint()
   @Get()
   getAll(): Promise<UserEntity[]> {
     return this.userService.getAll();
