@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../user/services/user.service';
-import { UserEntity } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
+import { UserEntity } from '../user/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { CryptographyService } from '../global/cryptografy/cryptography.service';
+import { CryptographyService } from '../global/cryptography/cryptography.service';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { Request, Response } from 'express';
 import { Cookie } from '../../constants/enums';
@@ -20,8 +20,8 @@ export class AuthService {
   }
 
   private generateToken(user: UserEntity): string {
-    const { email, id, role } = user;
-    return this.jwtService.sign({ email, id, role });
+    const { email, id, isAdmin } = user;
+    return this.jwtService.sign({ email, id, isAdmin });
   }
 
   injectJwtTokenIntoResponseCookies(response: Response, user: UserEntity) {
@@ -41,7 +41,7 @@ export class AuthService {
   async tryGetUserViaJwt(payload: JwtPayloadDto): Promise<UserEntity | undefined> {
     const user: UserEntity = await this.userService.getOne({ email: payload.email });
 
-    if (!(user.role.id === payload.role.id)) {
+    if (!(user.isAdmin === payload.isAdmin)) {
       return;
     }
 

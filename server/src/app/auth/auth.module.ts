@@ -9,7 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthController } from './auth.controller';
-import { PermissionsGuard } from './guards/permissions.guard';
+import { AdminGuard } from './guards/admin.guard';
 import { EnvironmentModule } from '../global/environment/environment.module';
 
 @Module({
@@ -25,7 +25,7 @@ import { EnvironmentModule } from '../global/environment/environment.module';
     },
     {
       provide: APP_GUARD,
-      useClass: PermissionsGuard,
+      useClass: AdminGuard,
     },
   ],
 })

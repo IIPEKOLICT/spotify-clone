@@ -1,23 +1,23 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { MetadataKey, Permission } from '../../../constants/enums';
+import { MetadataKey } from '../../../constants/enums';
 
 @Injectable()
-export class PermissionsGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    const requiredPermissions = this.reflector.getAllAndOverride<Permission[]>(MetadataKey.REQUIRED_PERMISSIONS, [
+    const isAdminEndpoint = this.reflector.getAllAndOverride<boolean>(MetadataKey.IS_ADMIN_ENDPOINT, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    if (!requiredPermissions?.length) {
+    if (!isAdminEndpoint) {
       return true;
     }
 
     const { user } = context.switchToHttp().getRequest();
-    return requiredPermissions.every((permission: Permission) => user?.role?.[permission]);
+    return !!user?.isAdmin;
   }
 }
