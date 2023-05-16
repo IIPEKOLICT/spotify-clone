@@ -13,7 +13,7 @@ import {
 import { ApiOperationDescription, Endpoint } from '../../constants/enums';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdminEndpoint } from '../auth/decorators/admin-endpoint.decorator';
 import { User } from './decorators/user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -58,6 +58,7 @@ export class UserController {
   }
 
   @ApiOperation({ description: ApiOperationDescription.USERS_UPDATE_CURRENT_PICTURE })
+  @ApiBody({ description: 'Form data { "picture": image }' })
   @ApiResponse({ type: UserEntity })
   @UseInterceptors(FileInterceptor('picture'))
   @Patch('current/picture')
