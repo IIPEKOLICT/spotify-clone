@@ -3,7 +3,7 @@ import { DeepPartial, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CrudService } from '../../shared/services/crud.service';
-import { CryptographyService } from '../global/cryptografy/cryptography.service';
+import { CryptographyService } from '../global/cryptography/cryptography.service';
 import { EntityName } from '../../constants/enums';
 import { Coroutine } from '@iipekolict/coroutine';
 
@@ -14,6 +14,14 @@ export class UserService extends CrudService<UserEntity> {
     private readonly cryptographyService: CryptographyService,
   ) {
     super(repository, EntityName.USER);
+  }
+
+  async updateById(id: number, dto: DeepPartial<UserEntity>): Promise<UserEntity> {
+    if (dto.password) {
+      dto.password = await this.cryptographyService.hash(dto.password);
+    }
+
+    return super.updateById(id, dto);
   }
 
   async create(entity: DeepPartial<UserEntity>): Promise<UserEntity> {

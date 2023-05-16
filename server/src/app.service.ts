@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { HeathCheckDto } from './shared/dto/heath-check.dto';
+import { DefaultResponseDto } from './shared/dto/default-response.dto';
 
 @Injectable()
 export class AppService {
-  healthCheck(): HeathCheckDto {
-    return { status: 'ok' };
+  healthCheck(): DefaultResponseDto {
+    return DefaultResponseDto.new();
   }
 }

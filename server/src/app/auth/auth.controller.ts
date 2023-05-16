@@ -5,7 +5,7 @@ import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/user.entity';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { RegisterDto } from './dto/register.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '../user/decorators/user.decorator';
 import { Response } from 'express';
@@ -40,7 +40,7 @@ export class AuthController {
   @Public()
   @Post('register')
   @HttpCode(HttpStatus.OK)
-  async register(@Res({ passthrough: true }) response: Response, @Body() dto: CreateUserDto): Promise<UserEntity> {
+  async register(@Res({ passthrough: true }) response: Response, @Body() dto: RegisterDto): Promise<UserEntity> {
     const isExistsWithThisEmail: boolean = await this.userService.isExists({ email: dto.email });
 
     if (isExistsWithThisEmail) {

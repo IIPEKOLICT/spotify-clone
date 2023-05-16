@@ -31,4 +31,8 @@ export class UserEntity extends BaseEntity {
   @ApiProperty()
   @Column({ default: false })
   isAdmin: boolean;
+
+  @ApiProperty()
+  @Column({ default: false })
+  isBanned: boolean;
 }
