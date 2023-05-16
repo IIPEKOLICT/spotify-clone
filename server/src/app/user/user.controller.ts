@@ -10,7 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperationDescription, Endpoint } from '../../constants/enums';
+import { ApiOperationSummary, Endpoint } from '../../constants/enums';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -27,7 +27,7 @@ import { StorageService } from '../storage/storage.service';
 export class UserController {
   constructor(private readonly userService: UserService, private readonly storageService: StorageService) {}
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_GET_ALL })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_GET_ALL })
   @ApiResponse({ type: [UserEntity] })
   @AdminEndpoint()
   @Get()
@@ -35,7 +35,7 @@ export class UserController {
     return this.userService.getAll();
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_CREATE_USER })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_CREATE_USER })
   @ApiResponse({ type: UserEntity })
   @AdminEndpoint()
   @Post()
@@ -43,21 +43,21 @@ export class UserController {
     return this.userService.create(dto);
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_GET_CURRENT })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_GET_CURRENT })
   @ApiResponse({ type: UserEntity })
   @Get('current')
   async getCurrent(@User() user: UserEntity): Promise<UserEntity> {
     return user;
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_UPDATE_CURRENT })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_UPDATE_CURRENT })
   @ApiResponse({ type: UserEntity })
   @Patch('current')
   async updateCurrent(@User() user: UserEntity, @Body() dto: UpdateUserDto): Promise<UserEntity> {
     return this.userService.updateById(user.id, dto);
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_UPDATE_CURRENT_PICTURE })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_UPDATE_CURRENT_PICTURE })
   @ApiBody({ description: 'Form data { "picture": image }' })
   @ApiResponse({ type: UserEntity })
   @UseInterceptors(FileInterceptor('picture'))
@@ -67,7 +67,7 @@ export class UserController {
     return this.userService.updateById(user.id, { profilePicture: link });
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_DELETE_CURRENT_PICTURE })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_DELETE_CURRENT_PICTURE })
   @ApiResponse({ type: UserEntity })
   @Delete('current/picture')
   async deleteCurrentPicture(@User() user: UserEntity): Promise<UserEntity> {
@@ -75,7 +75,7 @@ export class UserController {
     return this.userService.updateById(user.id, { profilePicture: null });
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_DELETE_CURRENT })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_DELETE_CURRENT })
   @ApiResponse({ type: DefaultResponseDto })
   @Delete('current')
   async deleteCurrent(@User() user: UserEntity): Promise<DefaultResponseDto> {
@@ -83,7 +83,7 @@ export class UserController {
     return DefaultResponseDto.new();
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_DELETE_USER })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_DELETE_USER })
   @ApiResponse({ type: DefaultResponseDto })
   @AdminEndpoint()
   @Delete(':userId')
@@ -92,7 +92,7 @@ export class UserController {
     return DefaultResponseDto.new();
   }
 
-  @ApiOperation({ description: ApiOperationDescription.USERS_BAN_USER })
+  @ApiOperation({ summary: ApiOperationSummary.USERS_BAN_USER })
   @ApiResponse({ type: UserEntity })
   @AdminEndpoint()
   @Patch(':userId/ban')

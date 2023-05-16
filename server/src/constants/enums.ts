@@ -12,7 +12,7 @@ export enum MetadataKey {
   IS_ADMIN_ENDPOINT = 'is-admin-endpoint',
 }
 
-export enum ApiOperationDescription {
+export enum ApiOperationSummary {
   MAIN_STATUS = 'get backend status',
 
   AUTH_REFRESH_TOKEN = 'refresh JWT token',

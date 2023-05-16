@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
-import { ApiOperationDescription, Endpoint } from '../../constants/enums';
+import { ApiOperationSummary, Endpoint } from '../../constants/enums';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
@@ -16,7 +16,7 @@ import { BadRequestError } from '../../errors/bad-request.error';
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: ApiOperationDescription.AUTH_REFRESH_TOKEN })
+  @ApiOperation({ summary: ApiOperationSummary.AUTH_REFRESH_TOKEN })
   @ApiResponse({ type: UserEntity })
   @Get('refresh')
   async updateToken(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
@@ -24,7 +24,7 @@ export class AuthController {
     return user;
   }
 
-  @ApiOperation({ summary: ApiOperationDescription.AUTH_LOGIN })
+  @ApiOperation({ summary: ApiOperationSummary.AUTH_LOGIN })
   @ApiResponse({ type: UserEntity })
   @Public()
   @UseGuards(LocalAuthGuard)
@@ -35,7 +35,7 @@ export class AuthController {
     return user;
   }
 
-  @ApiOperation({ summary: ApiOperationDescription.AUTH_REGISTER })
+  @ApiOperation({ summary: ApiOperationSummary.AUTH_REGISTER })
   @ApiResponse({ type: UserEntity })
   @Public()
   @Post('register')
