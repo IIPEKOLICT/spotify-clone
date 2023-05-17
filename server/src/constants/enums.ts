@@ -1,10 +1,12 @@
 export enum Endpoint {
   USERS = 'users',
   AUTH = 'auth',
+  POSTS = 'posts',
 }
 
 export enum EntityName {
   USER = 'user',
+  POST = 'post',
 }
 
 export enum MetadataKey {
@@ -30,6 +32,11 @@ export enum ApiOperationSummary {
   USERS_BAN_USER = 'ban / unban user by id (admin)',
   USERS_UPDATE_USER_ROLE = 'update user role (admin)',
   USERS_UPDATE_USER_STATUS = 'update user status by id',
+
+  POSTS_GET_ALL = 'get all user posts',
+  POSTS_CREATE = 'create post',
+  POSTS_UPDATE_TEXT = 'update post text by id',
+  POSTS_DELETE_BY_ID = 'delete post by id',
 }
 
 export enum Cookie {

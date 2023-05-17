@@ -22,7 +22,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from '../storage/storage.service';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
-import { Public } from '../auth/decorators/public.decorator';
 import { UpdateUserStatusDto } from './dto/update-user-status.dto';
 
 @ApiTags(Endpoint.USERS)
@@ -117,7 +116,6 @@ export class UserController {
 
   @ApiOperation({ summary: ApiOperationSummary.USERS_UPDATE_USER_STATUS })
   @ApiResponse({ type: UserEntity })
-  @Public()
   @Patch(':userId/status')
   async updateUserStatus(
     @Param('userId', ParseIntPipe) userId: number,
