@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-import { EntityName } from '../../constants/enums';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { EntityName, UserRole, UserStatus } from '../../constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
+import { TimestampEntity } from '../../shared/entities/timestamp.entity';
 
 @Entity(EntityName.USER)
-export class UserEntity extends BaseEntity {
+export class UserEntity extends TimestampEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   readonly id: number;
@@ -29,10 +30,14 @@ export class UserEntity extends BaseEntity {
   profilePicture: string | null;
 
   @ApiProperty()
-  @Column({ default: false })
-  isAdmin: boolean;
+  @Column({ default: UserRole.USER })
+  role: UserRole;
 
   @ApiProperty()
-  @Column({ default: false })
+  @Column({ name: 'is_banned', default: false })
   isBanned: boolean;
+
+  @ApiProperty()
+  @Column({ default: UserStatus.OFFLINE })
+  status: UserStatus;
 }

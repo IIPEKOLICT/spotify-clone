@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { UserService } from '../app/user/user.service';
 import { UserEntity } from '../app/user/user.entity';
 import { DeepPartial } from 'typeorm';
+import { UserRole } from '../constants/enums';
 
 export const initDatabase = async (app: INestApplication) => {
   const userService = app.get(UserService);
@@ -20,7 +21,7 @@ export const initDatabase = async (app: INestApplication) => {
     {
       email: 'admin@gmail.com',
       password: '12345',
-      isAdmin: true,
+      role: UserRole.ADMIN,
     },
   ];
 

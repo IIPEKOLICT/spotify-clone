@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from '../../../constants/enums';
 
 export class CreateUserDto {
   @ApiProperty({ default: '' })
@@ -13,6 +14,6 @@ export class CreateUserDto {
   @ApiProperty({ required: true })
   readonly password: string;
 
-  @ApiProperty({ default: false })
-  readonly isAdmin: boolean = false;
+  @ApiProperty({ default: UserRole.USER })
+  readonly role: UserRole = UserRole.USER;
 }

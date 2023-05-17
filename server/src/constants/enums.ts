@@ -9,7 +9,7 @@ export enum EntityName {
 
 export enum MetadataKey {
   IS_PUBLIC_ENDPOINT = 'is-public-endpoint',
-  IS_ADMIN_ENDPOINT = 'is-admin-endpoint',
+  REQUIRED_ROLES = 'required-roles',
 }
 
 export enum ApiOperationSummary {
@@ -28,6 +28,8 @@ export enum ApiOperationSummary {
   USERS_DELETE_CURRENT_PICTURE = 'delete current user profile picture',
   USERS_DELETE_USER = 'delete user by id (admin)',
   USERS_BAN_USER = 'ban / unban user by id (admin)',
+  USERS_UPDATE_USER_ROLE = 'update user role (admin)',
+  USERS_UPDATE_USER_STATUS = 'update user status by id',
 }
 
 export enum Cookie {
@@ -42,4 +44,14 @@ export enum ErrorMessage {
   UNKNOWN_EXCEPTION = 'Internal server exception',
   UNAUTHORIZED = 'Unauthorized',
   BAD_REQUEST = 'Bad request',
+}
+
+export enum UserStatus {
+  ONLINE = 'online',
+  OFFLINE = 'offline',
+}
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
 }

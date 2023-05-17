@@ -1,5 +1,7 @@
+import { UserRole } from '../../../constants/enums';
+
 export class JwtPayloadDto {
   readonly id: number;
   readonly email: string;
-  readonly isAdmin: boolean;
+  readonly role: UserRole;
 }

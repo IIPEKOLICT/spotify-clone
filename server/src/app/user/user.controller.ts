@@ -10,17 +10,20 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperationSummary, Endpoint } from '../../constants/enums';
+import { ApiOperationSummary, Endpoint, UserRole } from '../../constants/enums';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AdminEndpoint } from '../auth/decorators/admin-endpoint.decorator';
 import { User } from './decorators/user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DefaultResponseDto } from '../../shared/dto/default-response.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from '../storage/storage.service';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UpdateUserRoleDto } from './dto/update-user-role.dto';
+import { Public } from '../auth/decorators/public.decorator';
+import { UpdateUserStatusDto } from './dto/update-user-status.dto';
 
 @ApiTags(Endpoint.USERS)
 @Controller(Endpoint.USERS)
@@ -29,7 +32,7 @@ export class UserController {
 
   @ApiOperation({ summary: ApiOperationSummary.USERS_GET_ALL })
   @ApiResponse({ type: [UserEntity] })
-  @AdminEndpoint()
+  @Roles(UserRole.ADMIN)
   @Get()
   async getAll(): Promise<UserEntity[]> {
     return this.userService.getAll();
@@ -37,7 +40,7 @@ export class UserController {
 
   @ApiOperation({ summary: ApiOperationSummary.USERS_CREATE_USER })
   @ApiResponse({ type: UserEntity })
-  @AdminEndpoint()
+  @Roles(UserRole.ADMIN)
   @Post()
   async createUser(@Body() dto: CreateUserDto): Promise<UserEntity> {
     return this.userService.create(dto);
@@ -55,6 +58,14 @@ export class UserController {
   @Patch('current')
   async updateCurrent(@User() user: UserEntity, @Body() dto: UpdateUserDto): Promise<UserEntity> {
     return this.userService.updateById(user.id, dto);
+  }
+
+  @ApiOperation({ summary: ApiOperationSummary.USERS_DELETE_CURRENT })
+  @ApiResponse({ type: DefaultResponseDto })
+  @Delete('current')
+  async deleteCurrent(@User() user: UserEntity): Promise<DefaultResponseDto> {
+    await this.userService.deleteById(user.id);
+    return DefaultResponseDto.new();
   }
 
   @ApiOperation({ summary: ApiOperationSummary.USERS_UPDATE_CURRENT_PICTURE })
@@ -75,17 +86,9 @@ export class UserController {
     return this.userService.updateById(user.id, { profilePicture: null });
   }
 
-  @ApiOperation({ summary: ApiOperationSummary.USERS_DELETE_CURRENT })
-  @ApiResponse({ type: DefaultResponseDto })
-  @Delete('current')
-  async deleteCurrent(@User() user: UserEntity): Promise<DefaultResponseDto> {
-    await this.userService.deleteById(user.id);
-    return DefaultResponseDto.new();
-  }
-
   @ApiOperation({ summary: ApiOperationSummary.USERS_DELETE_USER })
   @ApiResponse({ type: DefaultResponseDto })
-  @AdminEndpoint()
+  @Roles(UserRole.ADMIN)
   @Delete(':userId')
   async deleteUser(@Param('userId', ParseIntPipe) userId: number): Promise<DefaultResponseDto> {
     await this.userService.deleteById(userId);
@@ -94,10 +97,32 @@ export class UserController {
 
   @ApiOperation({ summary: ApiOperationSummary.USERS_BAN_USER })
   @ApiResponse({ type: UserEntity })
-  @AdminEndpoint()
+  @Roles(UserRole.ADMIN)
   @Patch(':userId/ban')
   async banUser(@Param('userId', ParseIntPipe) userId: number): Promise<UserEntity> {
     const user: UserEntity = await this.userService.getById(userId);
     return this.userService.updateById(userId, { isBanned: !user.isBanned });
+  }
+
+  @ApiOperation({ summary: ApiOperationSummary.USERS_UPDATE_USER_ROLE })
+  @ApiResponse({ type: UserEntity })
+  @Roles(UserRole.ADMIN)
+  @Patch(':userId/role')
+  async updateUserRole(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() body: UpdateUserRoleDto,
+  ): Promise<UserEntity> {
+    return this.userService.updateById(userId, body);
+  }
+
+  @ApiOperation({ summary: ApiOperationSummary.USERS_UPDATE_USER_STATUS })
+  @ApiResponse({ type: UserEntity })
+  @Public()
+  @Patch(':userId/status')
+  async updateUserStatus(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() body: UpdateUserStatusDto,
+  ): Promise<UserEntity> {
+    return this.userService.updateById(userId, body);
   }
 }
