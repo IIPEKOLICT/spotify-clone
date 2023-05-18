@@ -20,8 +20,8 @@ export class AuthService {
   }
 
   private generateToken(user: UserEntity): string {
-    const { email, id, role } = user;
-    return this.jwtService.sign({ email, id, role });
+    const { id, createdAt } = user;
+    return this.jwtService.sign({ id, createdAt });
   }
 
   injectJwtTokenIntoResponseCookies(response: Response, user: UserEntity) {
@@ -39,9 +39,9 @@ export class AuthService {
   }
 
   async tryGetUserViaJwt(payload: JwtPayloadDto): Promise<UserEntity | undefined> {
-    const user: UserEntity = await this.userService.getOne({ email: payload.email });
+    const user: UserEntity = await this.userService.getById(payload.id);
 
-    if (!(user.role === payload.role)) {
+    if (user.createdAt !== payload.createdAt) {
       return;
     }
 

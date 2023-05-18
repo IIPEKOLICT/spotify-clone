@@ -17,7 +17,6 @@ export class UserEntity extends TimestampEntity {
   @Column({ unique: true })
   email: string;
 
-  @ApiProperty()
   @Column()
   password: string;
 

@@ -10,18 +10,23 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '../user/decorators/user.decorator';
 import { Response } from 'express';
 import { BadRequestError } from '../../errors/bad-request.error';
+import { UserMapper } from '../user/mappers/user.mapper';
 
 @ApiTags(Endpoint.AUTH)
 @Controller(Endpoint.AUTH)
 export class AuthController {
-  constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly userMapper: UserMapper,
+  ) {}
 
   @ApiOperation({ summary: ApiOperationSummary.AUTH_REFRESH_TOKEN })
   @ApiResponse({ type: UserEntity })
   @Get('refresh')
   async updateToken(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
-    return user;
+    return this.userMapper.mapOne(user);
   }
 
   @ApiOperation({ summary: ApiOperationSummary.AUTH_LOGIN })
@@ -32,7 +37,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
-    return user;
+    return this.userMapper.mapOne(user);
   }
 
   @ApiOperation({ summary: ApiOperationSummary.AUTH_REGISTER })
@@ -50,6 +55,6 @@ export class AuthController {
     const user: UserEntity = await this.userService.create(dto);
 
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
-    return user;
+    return this.userMapper.mapOne(user);
   }
 }
