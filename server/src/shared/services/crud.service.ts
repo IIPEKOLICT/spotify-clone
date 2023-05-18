@@ -16,6 +16,14 @@ export abstract class CrudService<Entity extends { id: number }> {
     return this.repository.find();
   }
 
+  async getPaginated(
+    filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[],
+    limit?: number,
+    skip?: number,
+  ): Promise<Entity[]> {
+    return this.repository.find({ where: filter, skip, take: limit });
+  }
+
   async getById(id: number): Promise<Entity> {
     return this.getOne({ id } as FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]);
   }

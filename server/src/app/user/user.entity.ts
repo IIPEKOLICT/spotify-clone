@@ -1,14 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { EntityName, UserRole, UserStatus } from '../../constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { TimestampEntity } from '../../shared/entities/timestamp.entity';
 
 @Entity(EntityName.USER)
 export class UserEntity extends TimestampEntity {
-  @ApiProperty()
-  @PrimaryGeneratedColumn()
-  readonly id: number;
-
   @ApiProperty()
   @Column({ name: 'first_name', default: '' })
   firstName: string;

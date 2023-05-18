@@ -10,6 +10,7 @@ import { CryptographyModule } from './app/global/cryptography/cryptography.modul
 import { StorageModule } from './app/storage/storage.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { serveStaticModuleOptions } from './configs/static.config';
+import { PostModule } from './app/post/post.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { serveStaticModuleOptions } from './configs/static.config';
     UserModule,
     CryptographyModule,
     StorageModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

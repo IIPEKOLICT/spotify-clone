@@ -1,7 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 export class TimestampEntity {
+  @ApiProperty()
+  @PrimaryGeneratedColumn()
+  readonly id: number;
+
   @ApiProperty()
   @CreateDateColumn({ name: 'created_at', nullable: false, update: false })
   readonly createdAt: Date;
