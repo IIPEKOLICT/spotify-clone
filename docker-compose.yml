@@ -7,21 +7,62 @@ services:
       - 'server'
       - 'dev'
       - 'prod'
+    restart: on-failure
     image: postgres:latest
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: dbname
-    volumes:
-      - db-data:/var/lib/postgresql/data
+
+  socket_server_dev:
+    profiles:
+      - 'socket-server'
+      - 'server'
+      - 'dev'
+    restart: on-failure
+    build:
+      context: ./socket-server
+      dockerfile: Dockerfile.dev
     ports:
-      - '5432:5432'
+      - '8888:8888'
+    volumes:
+      - ./socket-server:/app
+      - ./shared:/shared
+    env_file:
+      - ./socket-server/.env
+    environment:
+      PORT: '8888'
+    depends_on:
+      - db
+
+  socket_server_prod:
+    profiles:
+      - 'prod'
+    restart: on-failure
+    build:
+      context: ./socket-server
+      dockerfile: Dockerfile.prod
+    ports:
+      - '8888:8888'
+    volumes:
+      - ./socket-server:/app
+      - ./shared:/shared
+    env_file:
+      - ./socket-server/.env
+    environment:
+      PORT: '8888'
+    depends_on:
+      - db
 
   server_dev:
     profiles:
       - 'server'
       - 'dev'
-    restart: always
+    restart: on-failure
     build:
       context: ./server
       dockerfile: Dockerfile.dev
@@ -30,21 +71,22 @@ services:
     volumes:
       - ./server:/app
       - ./server/public:/public
+      - ./shared:/shared
     env_file:
       - ./server/.env
     environment:
       NODE_ENV: 'development'
       PORT: '8000'
+      SOCKET_SERVER_URL: 'ws://localhost:8888'
       DATABASE_URL: 'postgres://user:password@db:5432/dbname'
-    links:
-      - db
     depends_on:
       - db
+      - socket_server_dev
 
   server_prod:
     profiles:
       - 'prod'
-    restart: always
+    restart: on-failure
     build:
       context: ./server
       dockerfile: Dockerfile.prod
@@ -53,22 +95,23 @@ services:
     volumes:
       - ./server:/app
       - ./server/public:/public
+      - ./shared:/shared
     env_file:
       - ./server/.env
     environment:
       NODE_ENV: 'production'
       PORT: '8000'
+      SOCKET_SERVER_URL: 'ws://localhost:8888'
       DATABASE_URL: 'postgres://user:password@db:5432/dbname'
-    links:
-      - db
     depends_on:
       - db
+      - socket_server_prod
 
   client_dev:
     profiles:
       - 'client'
       - 'dev'
-    restart: always
+    restart: on-failure
     build:
       context: ./client
       dockerfile: Dockerfile.dev
@@ -76,6 +119,7 @@ services:
       - "3000:3000"
     volumes:
       - ./client:/app
+      - ./shared:/shared
     env_file:
       - ./client/.env
     environment:
@@ -83,11 +127,12 @@ services:
       PORT: '3000'
       NODE_ENV: 'development'
       REACT_APP_API_URL: 'http://localhost:8000'
+      SOCKET_SERVER_URL: 'ws://localhost:8888'
 
   client_prod:
     profiles:
       - 'prod'
-    restart: always
+    restart: on-failure
     build:
       context: ./client
       dockerfile: Dockerfile.prod
@@ -95,12 +140,18 @@ services:
       - "3000:80"
     volumes:
       - ./client:/app
+      - ./shared:/shared
     env_file:
       - ./client/.env
     environment:
       CI: 'true'
       NODE_ENV: 'production'
       REACT_APP_API_URL: 'http://localhost:8000'
+      SOCKET_SERVER_URL: 'ws://localhost:8888'
+    depends_on:
+      - db
+      - server_prod
+      - socket_server_prod
 
 volumes:
   db-data:
