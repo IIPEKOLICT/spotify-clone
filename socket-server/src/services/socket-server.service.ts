@@ -1,39 +1,36 @@
 import { Server as HttpServer } from 'http';
 import { Server, Socket } from 'socket.io';
-import { SocketAuth, SocketData, SocketDataWithPayload, SocketTarget } from '../../../shared/sockets/types';
-import { SocketEvent } from '../../../shared/sockets/enums';
+import {
+  SocketEvent,
+  SocketAuth,
+  SocketData,
+  SocketDataWithPayload,
+  getSocketRoomName,
+  getSocketRoomId,
+  SocketBroadcastEvent,
+} from '@spotify/sockets-shared';
 import { IncomeEventsMap, OutgoingEventsMap, SocketIncomeEventHandler } from '../types';
 
-export class SocketService {
+export class SocketServerService {
   private constructor(
     private readonly socket: Socket<IncomeEventsMap, OutgoingEventsMap, OutgoingEventsMap, SocketAuth>,
   ) {}
 
   private log(message: string) {
-    console.log(`[SOCKET][#${this.socket.id}]: ${message}`);
-  }
-
-  private getId(target: SocketTarget): number {
-    return target.entityId ?? target.userId ?? this.socket.data.userId;
-  }
-
-  private getRoomName(target: SocketTarget): string {
-    return `${target.place}:${target.entity}:${this.getId(target)}`;
+    console.log(`[SOCKET][#${this.socket.id}][${this.userName}]: ${message}`);
   }
 
   private get userName(): string | number {
     return this.socket.data.username ?? this.socket.data.userId ?? 'Anonymous';
   }
 
-  private sendWithPayload(data: SocketDataWithPayload, event: SocketEvent) {
-    const room: string = this.getRoomName(data.target);
-    this.socket.broadcast.to(room).emit(event, data.payload);
+  private send<Payload extends object | undefined = undefined>(
+    event: SocketBroadcastEvent,
+    data: SocketDataWithPayload<Payload>,
+  ) {
+    const room: string = getSocketRoomName(data.target, this.socket.data.userId);
+    this.socket.broadcast.to(room).emit(event, data);
     this.log(`User (${this.userName}) send a ${event} message to room ${room}`);
-  }
-
-  private sendWithUserName(data: SocketData, event: SocketEvent) {
-    const room: string = this.getRoomName(data.target);
-    this.socket.broadcast.to(room).emit(event, { username: this.userName });
   }
 
   [SocketEvent.AUTH](data: SocketAuth) {
@@ -46,7 +43,7 @@ export class SocketService {
   }
 
   [SocketEvent.JOIN](data: SocketData) {
-    const room: string = this.getRoomName(data.target);
+    const room: string = getSocketRoomName(data.target, this.socket.data.userId);
 
     this.socket.join(room);
     this.socket.broadcast.to(room).emit(SocketEvent.JOINED, { username: this.userName });
@@ -55,33 +52,50 @@ export class SocketService {
   }
 
   [SocketEvent.NEW](data: SocketDataWithPayload) {
-    this.sendWithPayload(data, SocketEvent.NEW);
+    this.send(SocketEvent.NEW, data);
   }
 
   [SocketEvent.EDIT](data: SocketDataWithPayload) {
-    this.sendWithPayload(data, SocketEvent.EDIT);
+    this.send(SocketEvent.EDIT, data);
   }
 
   [SocketEvent.REMOVE](data: SocketData) {
-    this.socket.broadcast.to(this.getRoomName(data.target)).emit(SocketEvent.REMOVE, { id: this.getId(data.target) });
+    this.send(SocketEvent.REMOVE, {
+      ...data,
+      payload: {
+        id: getSocketRoomId(data.target, this.socket.data.userId),
+      },
+    });
   }
 
   [SocketEvent.TYPING](data: SocketData) {
-    this.sendWithUserName(data, SocketEvent.TYPING);
+    this.send(SocketEvent.TYPING, {
+      ...data,
+      payload: {
+        userId: getSocketRoomId(data.target, this.socket.data.userId),
+        username: this.userName,
+      },
+    });
   }
 
   [SocketEvent.STOP_TYPING](data: SocketData) {
-    this.sendWithUserName(data, SocketEvent.STOP_TYPING);
+    this.send(SocketEvent.STOP_TYPING, {
+      ...data,
+      payload: {
+        userId: getSocketRoomId(data.target, this.socket.data.userId),
+        username: this.userName,
+      },
+    });
   }
 
   [SocketEvent.LEAVE](data: SocketData) {
-    const room: string = this.getRoomName(data.target);
+    const room: string = getSocketRoomName(data.target, this.socket.data.userId);
     this.socket.leave(room);
     this.log(`User (${this.userName}) has been leaved the room ${room}`);
   }
 
   [SocketEvent.DISCONNECT]() {
-    this.log(`${this.userName} disconnected from the server`);
+    this.log(`User (${this.userName}) disconnected from the server`);
   }
 
   [SocketEvent.CONNECT_ERROR](error: Error) {
@@ -93,10 +107,10 @@ export class SocketService {
   }
 
   static inject(server: HttpServer) {
-    const io = new Server(server);
+    const io = new Server(server, { transports: ['websocket'], allowUpgrades: false });
 
     io.on('connection', (socket) => {
-      const service: SocketService = new this(socket);
+      const service: SocketServerService = new this(socket);
 
       for (const eventId in SocketEvent) {
         const event: SocketEvent = SocketEvent[eventId];

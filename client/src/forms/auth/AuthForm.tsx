@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { ButtonComponent } from '../../common/button/ButtonComponent';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthForm.module.scss';
-import { authAPI } from '../../services/AuthServices';
+import { authAPI } from '../../services/AuthService';
 import { FC, ChangeEvent, useEffect } from 'react';
 import { AuthType } from '../../constants/enums';
 import { useActions } from '../../hooks/actions';
@@ -33,7 +33,7 @@ export const AuthForm: FC<IProps> = ({ type }) => {
     if (success_up || success_in) {
       data_in && addUser(data_in);
       data_up && addUser(data_up);
-      addNotification({type: "success", message: "User authorization was successful"});
+      addNotification({ type: 'success', message: 'User authorization was successful' });
     }
   }, [success_in, success_up, addUser, addNotification, data_in, data_up]);
 
@@ -94,9 +94,9 @@ export const AuthForm: FC<IProps> = ({ type }) => {
         </Box>
         <ButtonComponent
           style={{
-            height: "44px",
-            textTransform: "uppercase",
-            width: type === AuthType.LOGIN ? { xs: "150px", sm: "200px" } : { xs: "240px", sm: "290px" },
+            height: '44px',
+            textTransform: 'uppercase',
+            width: type === AuthType.LOGIN ? { xs: '150px', sm: '200px' } : { xs: '240px', sm: '290px' },
           }}
           color="green"
           variant="contained"
@@ -119,9 +119,9 @@ export const AuthForm: FC<IProps> = ({ type }) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '15px', width: { xs: '70%', sm: '300px' } }}>
           <ButtonComponent
             style={{
-              height: "44px",
-              textTransform: "uppercase",
-              width: "100%",
+              height: '44px',
+              textTransform: 'uppercase',
+              width: '100%',
             }}
             variant="outlined"
             color="black"

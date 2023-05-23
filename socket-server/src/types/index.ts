@@ -1,5 +1,10 @@
-import { SocketEvent } from '../../../shared/sockets/enums';
-import { SocketAuth, SocketData, SocketDataWithPayload } from '../../../shared/sockets/types';
+import {
+  SocketEvent,
+  SocketAuth,
+  SocketData,
+  SocketDataWithPayload,
+  SocketBroadcastEvent,
+} from '@spotify/sockets-shared';
 
 export type SocketIncomeEventHandler = (data: SocketAuth | SocketData | SocketDataWithPayload) => void;
 export type SocketOutgoingEventHandler = (data: object) => void;
@@ -9,5 +14,5 @@ export type IncomeEventsMap = {
 };
 
 export type OutgoingEventsMap = {
-  [Event in Partial<SocketEvent>]: SocketOutgoingEventHandler;
+  [Event in Partial<SocketBroadcastEvent>]: SocketOutgoingEventHandler;
 };

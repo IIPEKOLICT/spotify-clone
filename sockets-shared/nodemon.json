@@ -1,0 +1,6 @@
+{
+  "ignore": [".idea", ".git", "node_modules", "dist"],
+  "watch": ["src"],
+  "exec": "npm run inject",
+  "ext": "ts"
+}

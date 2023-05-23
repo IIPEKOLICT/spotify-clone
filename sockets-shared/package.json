@@ -1,0 +1,26 @@
+{
+  "name": "@spotify/sockets-shared",
+  "version": "1.0.0",
+  "scripts": {
+    "build:test": "rm -rf dist && tsc && cp -rp public/package.json dist/package.json",
+    "build": "rm -rf dist && tsc",
+    "start": "nodemon",
+    "expose:test": "npm run build:test && cd dist && npm link && cd ..",
+    "expose": "npm run build && npm link",
+    "mount:server": "cd ../server && npm link @spotify/sockets-shared && cd ../sockets-shared",
+    "mount:socket-server": "cd ../socket-server && npm link @spotify/sockets-shared && cd ../sockets-shared",
+    "mount:client": "cd ../client && npm link @spotify/sockets-shared && cd ../sockets-shared",
+    "mount": "npm run mount:server && npm run mount:socket-server && npm run mount:client",
+    "inject": "npm run expose:test && npm run mount"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.6.1"
+  },
+  "peerDependencies": {
+    "socket.io-client": "^4.6.1"
+  }
+}

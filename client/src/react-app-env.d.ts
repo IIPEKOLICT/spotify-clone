@@ -2,6 +2,7 @@
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    REACT_APP_SERVER_ENDPOINT?: string;
+    REACT_APP_SERVER_URL?: string;
+    REACT_APP_SOCKET_SERVER_URL?: string;
   }
 }
