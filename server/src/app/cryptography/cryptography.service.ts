@@ -1,6 +1,6 @@
 import { compare, hash } from 'bcryptjs';
 import { Injectable } from '@nestjs/common';
-import { EnvironmentService } from '../environment/environment.service';
+import { EnvironmentService } from '../global/environment/environment.service';
 
 @Injectable()
 export class CryptographyService {

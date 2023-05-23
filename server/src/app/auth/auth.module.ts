@@ -11,9 +11,16 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthController } from './auth.controller';
 import { RolesGuard } from './guards/roles.guard';
 import { EnvironmentModule } from '../global/environment/environment.module';
+import { CryptographyModule } from '../cryptography/cryptography.module';
 
 @Module({
-  imports: [EnvironmentModule, UserModule, JwtModule.registerAsync(jwtModuleAsyncOptions), PassportModule],
+  imports: [
+    EnvironmentModule,
+    UserModule,
+    JwtModule.registerAsync(jwtModuleAsyncOptions),
+    PassportModule,
+    CryptographyModule,
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,

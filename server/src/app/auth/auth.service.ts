@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { CryptographyService } from '../global/cryptography/cryptography.service';
+import { CryptographyService } from '../cryptography/cryptography.service';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { Request, Response } from 'express';
 import { Cookie } from '../../constants/enums';
