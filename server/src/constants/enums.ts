@@ -20,6 +20,8 @@ export enum ApiOperationSummary {
   AUTH_REFRESH_TOKEN = 'refresh JWT token',
   AUTH_LOGIN = 'login',
   AUTH_REGISTER = 'register new user',
+  AUTH_LOGOUT = 'logout',
+  AUTH_CANCEL_SESSION = 'cancel session',
 
   USERS_GET_ALL = 'get all users (admin)',
   USERS_CREATE_USER = 'create new user (admin)',

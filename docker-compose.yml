@@ -23,7 +23,7 @@ services:
       - 'socket-server'
       - 'server'
       - 'dev'
-    restart: on-failure
+    restart: always
     build:
       context: ./socket-server
       dockerfile: Dockerfile.dev
@@ -62,7 +62,7 @@ services:
     profiles:
       - 'server'
       - 'dev'
-    restart: on-failure
+    restart: always
     build:
       context: ./server
       dockerfile: Dockerfile.dev
@@ -111,7 +111,7 @@ services:
     profiles:
       - 'client'
       - 'dev'
-    restart: on-failure
+    restart: always
     build:
       context: ./client
       dockerfile: Dockerfile.dev

@@ -20,4 +20,8 @@ export class EnvironmentService {
   get BCRYPT_SALT(): number {
     return this.configService.get('BCRYPT_SALT') ?? 5;
   }
+
+  get SOCKET_SERVER_URL(): string {
+    return this.configService.get('SOCKET_SERVER_URL') ?? 'ws://localhost:8888';
+  }
 }

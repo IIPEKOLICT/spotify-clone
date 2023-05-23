@@ -3,7 +3,7 @@ export enum SocketPlace {
 }
 
 export enum SocketEntity {
-  USER = 'user-status',
+  USER_STATUS = 'user-status',
   POST = 'post',
   AUDIO = 'audio',
 }

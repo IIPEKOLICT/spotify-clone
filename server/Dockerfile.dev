@@ -1,7 +1,7 @@
 FROM node:18-alpine
-WORKDIR /app
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+WORKDIR /server
+COPY package.json /server/package.json
+COPY package-lock.json /server/package-lock.json
 RUN npm ci --silent
-COPY . /app
+COPY . /server
 CMD ["npm", "run", "start:dev"]

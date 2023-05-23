@@ -28,6 +28,10 @@ export class AuthService {
     response.cookie(Cookie.ACCESS_TOKEN, this.generateToken(user));
   }
 
+  removeJwtTokenFromResponseCookies(response: Response) {
+    response.cookie(Cookie.ACCESS_TOKEN, '');
+  }
+
   async tryGetUserViaCredentials(email: string, password: string): Promise<UserEntity | undefined> {
     const user: UserEntity = await this.userService.getOne({ email: email });
 
