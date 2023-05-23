@@ -8,8 +8,9 @@ interface IProps {
   type: AuthType;
 }
 
-export const LoginPage: FC<IProps> = (props: IProps) => {
+export const LoginPage: FC<IProps> = (props) => {
   const { type } = props;
+
   return (
     <Box
       sx={{
@@ -17,13 +18,12 @@ export const LoginPage: FC<IProps> = (props: IProps) => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '20px',
         height: '100%',
         width: '100%',
         textAlign: 'center',
       }}
     >
-      <Box sx={{ fontSize: { xs: '18px', sm: '24px' }, marginBottom: '40px' }}>
+      <Box sx={{ fontSize: { xs: '18px', sm: '24px' }, marginBottom: '40px', paddingX: "20px" }}>
         <span className={styles.title}>
           Что бы продолжить {type === AuthType.LOGIN ? 'войдите' : 'зарегистрируйтесь'} в YumaSpotify
         </span>
