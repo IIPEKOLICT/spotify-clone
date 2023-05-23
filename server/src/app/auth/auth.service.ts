@@ -45,7 +45,7 @@ export class AuthService {
   async tryGetUserViaJwt(payload: JwtPayloadDto): Promise<UserEntity | undefined> {
     const user: UserEntity = await this.userService.getById(payload.id);
 
-    if (user.createdAt !== payload.createdAt) {
+    if (user.createdAt.getTime() !== Date.parse(payload.createdAt)) {
       return;
     }
 

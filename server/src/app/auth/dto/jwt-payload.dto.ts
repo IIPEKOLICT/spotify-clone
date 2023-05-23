@@ -1,4 +1,4 @@
 export class JwtPayloadDto {
   readonly id: number;
-  readonly createdAt: Date;
+  readonly createdAt: string;
 }

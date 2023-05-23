@@ -23,7 +23,7 @@ services:
       - 'socket-server'
       - 'server'
       - 'dev'
-    restart: always
+    restart: on-failure
     build:
       context: ./socket-server
       dockerfile: Dockerfile.dev
@@ -62,14 +62,14 @@ services:
     profiles:
       - 'server'
       - 'dev'
-    restart: always
+    restart: on-failure
     build:
       context: ./server
       dockerfile: Dockerfile.dev
     ports:
       - '8000:8000'
     volumes:
-      - ./server:/app
+      - ./server:/server
       - ./server/public:/public
       - ./shared:/shared
     env_file:
@@ -93,7 +93,7 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - ./server:/app
+      - ./server:/server
       - ./server/public:/public
       - ./shared:/shared
     env_file:
@@ -111,7 +111,7 @@ services:
     profiles:
       - 'client'
       - 'dev'
-    restart: always
+    restart: on-failure
     build:
       context: ./client
       dockerfile: Dockerfile.dev

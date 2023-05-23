@@ -22,7 +22,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from '../storage/storage.service';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
-import { UpdateUserStatusDto } from './dto/update-user-status.dto';
 import { BadRequestError } from '../../errors/bad-request.error';
 import { UserMapper } from './mappers/user.mapper';
 
@@ -123,16 +122,6 @@ export class UserController {
   async updateUserRole(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() body: UpdateUserRoleDto,
-  ): Promise<UserEntity> {
-    return this.userMapper.mapOne(await this.userService.updateById(userId, body));
-  }
-
-  @ApiOperation({ summary: ApiOperationSummary.USERS_UPDATE_USER_STATUS })
-  @ApiResponse({ type: UserEntity })
-  @Patch(':userId/status')
-  async updateUserStatus(
-    @Param('userId', ParseIntPipe) userId: number,
-    @Body() body: UpdateUserStatusDto,
   ): Promise<UserEntity> {
     return this.userMapper.mapOne(await this.userService.updateById(userId, body));
   }
