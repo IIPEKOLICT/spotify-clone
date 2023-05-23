@@ -1,40 +1,39 @@
 import * as React from "react";
 import { LoadingButton } from "@mui/lab";
+import { SxProps, Theme } from "@mui/material";
 
 interface IProps {
     name: string,
-    width: string,
-    mobileWidth?: string,
-    height: string,
-    outlined: boolean,
+    variant: "contained" | "outlined",
     loading?: boolean,
-    black?: boolean,
+    color: "black" | "green" | "blue",
     onSubmit: () => void,
+    style: SxProps<Theme>,
 };
 
-export const ButtonComponent: React.FC<IProps> = (props: IProps) => {
-    const { name, onSubmit, width, height, outlined, mobileWidth, loading, black } = props;
+export const ButtonComponent: React.FC<IProps> = (props) => {
+    const { name, onSubmit, loading, color, style, variant } = props;
     const submitForm = (): void => {
         onSubmit();
     };
+
     return(
         <LoadingButton
             onClick={submitForm}
             sx={{
+                ...style,
                 borderRadius: "15px",
                 padding: "0",
                 boxShadow: "none",
-                width: { xs: `${mobileWidth}`, sm: `${width}` },
-                height: `${height}`,
                 fontFamily: "Montserrat, sans-serif",
                 fontWeight: "600",
                 fontStyle: "normal",
                 fontSize: { xs: "14px", sm: "18px" },
             }}
-            variant={`${!outlined ? "contained" : "outlined"}`}
+            variant={variant}
             disabled={loading}
             loading={loading}
-            color={`${black ? "black" : "green"}`}
+            color={color}
         >{name}</LoadingButton>
     );
 };

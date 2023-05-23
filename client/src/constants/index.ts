@@ -5,6 +5,7 @@ declare module "@mui/material/styles" {
         green: PaletteColorOptions;
         white: PaletteColorOptions;
         black: PaletteColorOptions;
+        blue: PaletteColorOptions;
     }
     interface Palette extends CustomPalette {}
     interface PaletteOptions extends CustomPalette {}
@@ -14,6 +15,7 @@ declare module "@mui/material/Button" {
         green: true;
         white: true;
         black: true;
+        blue: true;
     }
 };
 declare module "@mui/material" {
@@ -21,6 +23,7 @@ declare module "@mui/material" {
         green: true;
         white: true;
         black: true;
+        blue: true;
     }
 };
 
@@ -42,5 +45,19 @@ export const theme = createTheme({
         green: createColor("#06BB64", "#F1F1F1"),
         white: createColor("#F1F1F1", "black"),
         black: createColor("#000000", "#F1F1F1"),
+        blue: createColor("rgb(100 127 178)", "white"),
     },
+    typography: {
+        fontFamily: "Montserrat, sans-serif",
+    }
 });
+
+export const nav_item = [
+    { index: 1, name: "Profile", },
+    { index: 2, name: "News", },
+    { index: 3, name: "Messenger", },
+    { index: 4, name: "Friends", },
+    { index: 5, name: "Photos", },
+    { index: 6, name: "Music", },
+    { index: 7, name: "Videos", },
+];
