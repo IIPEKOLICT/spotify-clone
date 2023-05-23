@@ -18,5 +18,13 @@ export enum RoutePath {
   HOME = '/',
   LOGIN = '/login',
   REGISTRATION = '/registration',
+  PROFILE = '/profile',
+  USER = '/profile/:id',
+  NEWS = '/news',
+  MESSENGER = '/messenger',
+  FRIENDS = '/friends',
+  PHOTOS = '/photos',
+  MUSIC = '/music',
+  VIDEOS = '/videos',
   DEFAULT = '*',
 }

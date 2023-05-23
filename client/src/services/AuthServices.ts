@@ -7,27 +7,38 @@ import { HttpMethod } from '../constants/enums';
 export const authAPI = createApi({
   reducerPath: 'authAPI',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${REACT_APP_SERVER_ENDPOINT}/auth`,
+    baseUrl: `${REACT_APP_SERVER_ENDPOINT}`,
     credentials: 'include',
   }),
+  tagTypes: ["user"],
   endpoints: (build) => ({
-    refreshToken: build.mutation<any, void>({
+    refreshToken: build.mutation<UserModel, void>({
       query: () => ({
-        url: '/refresh',
+        url: '/auth/refresh',
         method: HttpMethod.GET,
       }),
+      transformErrorResponse(baseQueryReturnValue: any) {
+        return { type: "error", message: baseQueryReturnValue.data?.message };
+      },
     }),
     signUp: build.mutation<UserModel, CreateUserRequestBody>({
       query: (body: CreateUserRequestBody) => ({
-        url: '/register',
+        url: '/auth/register',
         method: HttpMethod.POST,
         body,
       }),
     }),
     signIn: build.mutation<UserModel, LoginRequestBody>({
       query: (body: LoginRequestBody) => ({
-        url: '/login',
+        url: '/auth/login',
         method: HttpMethod.POST,
+        body,
+      }),
+    }),
+    updateUser: build.mutation<any, any>({
+      query: (body: any) => ({
+        url: '/users/current',
+        method: HttpMethod.PATCH,
         body,
       }),
     }),
