@@ -11,6 +11,6 @@ export class TimestampEntity {
   readonly createdAt: Date;
 
   @ApiProperty()
-  @UpdateDateColumn({ name: 'updated_at', nullable: false, update: false })
+  @UpdateDateColumn({ name: 'updated_at', nullable: false })
   readonly updatedAt: Date;
 }

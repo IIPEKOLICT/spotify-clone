@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { CryptographyService } from '../global/cryptography/cryptography.service';
+import { CryptographyService } from '../cryptography/cryptography.service';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { Request, Response } from 'express';
 import { Cookie } from '../../constants/enums';
@@ -28,6 +28,10 @@ export class AuthService {
     response.cookie(Cookie.ACCESS_TOKEN, this.generateToken(user));
   }
 
+  removeJwtTokenFromResponseCookies(response: Response) {
+    response.cookie(Cookie.ACCESS_TOKEN, '');
+  }
+
   async tryGetUserViaCredentials(email: string, password: string): Promise<UserEntity | undefined> {
     const user: UserEntity = await this.userService.getOne({ email: email });
 
@@ -41,7 +45,7 @@ export class AuthService {
   async tryGetUserViaJwt(payload: JwtPayloadDto): Promise<UserEntity | undefined> {
     const user: UserEntity = await this.userService.getById(payload.id);
 
-    if (user.createdAt !== payload.createdAt) {
+    if (user.createdAt.getTime() !== Date.parse(payload.createdAt)) {
       return;
     }
 

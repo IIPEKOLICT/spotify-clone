@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
-import { ApiOperationSummary, Endpoint } from '../../constants/enums';
+import { ApiOperationSummary, Endpoint, UserStatus } from '../../constants/enums';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
@@ -11,6 +11,8 @@ import { User } from '../user/decorators/user.decorator';
 import { Response } from 'express';
 import { BadRequestError } from '../../errors/bad-request.error';
 import { UserMapper } from '../user/mappers/user.mapper';
+import { UserPageSocketService } from '../global/socket/services/user-page-socket.service';
+import { DefaultResponseDto } from '../../shared/dto/default-response.dto';
 
 @ApiTags(Endpoint.AUTH)
 @Controller(Endpoint.AUTH)
@@ -19,12 +21,14 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly userMapper: UserMapper,
+    private readonly userPageSocketService: UserPageSocketService,
   ) {}
 
   @ApiOperation({ summary: ApiOperationSummary.AUTH_REFRESH_TOKEN })
   @ApiResponse({ type: UserEntity })
   @Get('refresh')
   async updateToken(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
+    this.userPageSocketService.editUserStatus(user.id, UserStatus.ONLINE);
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return this.userMapper.mapOne(user);
   }
@@ -36,6 +40,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
+    this.userPageSocketService.editUserStatus(user.id, UserStatus.ONLINE);
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return this.userMapper.mapOne(user);
   }
@@ -54,7 +59,32 @@ export class AuthController {
 
     const user: UserEntity = await this.userService.create(dto);
 
+    this.userPageSocketService.editUserStatus(user.id, UserStatus.ONLINE);
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return this.userMapper.mapOne(user);
+  }
+
+  @ApiOperation({ summary: ApiOperationSummary.AUTH_LOGOUT })
+  @ApiResponse({ type: DefaultResponseDto })
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<DefaultResponseDto> {
+    this.userPageSocketService.editUserStatus(user.id, UserStatus.OFFLINE);
+    await this.userService.updateById(user.id, { lastActivityDate: new Date() });
+    this.authService.removeJwtTokenFromResponseCookies(response);
+    return DefaultResponseDto.new();
+  }
+
+  @ApiOperation({ summary: ApiOperationSummary.AUTH_CANCEL_SESSION })
+  @ApiResponse({ type: DefaultResponseDto })
+  @Post('cancel-session')
+  @HttpCode(HttpStatus.OK)
+  async cancelSession(
+    @User() user: UserEntity,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<DefaultResponseDto> {
+    this.userPageSocketService.editUserStatus(user.id, UserStatus.OFFLINE);
+    await this.userService.updateById(user.id, { lastActivityDate: new Date() });
+    return DefaultResponseDto.new();
   }
 }

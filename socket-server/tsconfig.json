@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "esModuleInterop": true
+  },
+  "include": ["src", "../shared"],
+  "exclude": ["node_modules", "dist", "test"]
+}

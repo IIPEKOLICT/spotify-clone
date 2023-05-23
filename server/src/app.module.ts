@@ -6,11 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmModuleAsyncOptions } from './configs/typeorm.config';
 import { UserModule } from './app/user/user.module';
 import { AuthModule } from './app/auth/auth.module';
-import { CryptographyModule } from './app/global/cryptography/cryptography.module';
+import { CryptographyModule } from './app/cryptography/cryptography.module';
 import { StorageModule } from './app/storage/storage.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { serveStaticModuleOptions } from './configs/static.config';
 import { PostModule } from './app/post/post.module';
+import { SocketModule } from './app/global/socket/socket.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PostModule } from './app/post/post.module';
     CryptographyModule,
     StorageModule,
     PostModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],

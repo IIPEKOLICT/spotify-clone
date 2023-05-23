@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { EntityName, UserRole, UserStatus } from '../../constants/enums';
+import { EntityName, UserRole } from '../../constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { TimestampEntity } from '../../shared/entities/timestamp.entity';
 
@@ -33,6 +33,6 @@ export class UserEntity extends TimestampEntity {
   isBanned: boolean;
 
   @ApiProperty()
-  @Column({ default: UserStatus.OFFLINE })
-  status: UserStatus;
+  @Column({ name: 'last_activity_date', nullable: true })
+  lastActivityDate: Date | null;
 }
