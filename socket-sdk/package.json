@@ -1,6 +1,6 @@
 {
   "name": "@yumasoft-spotify/socket-sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Socket client SDK for yumasoft-spotify project",
   "repository": {
     "type": "git",
@@ -17,8 +17,13 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
-  "keywords": ["sockets", "sdk"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "sockets",
+    "sdk"
+  ],
   "author": "Evgenii Scherbakov <iipekolict@gmail.com>",
   "license": "MIT",
   "scripts": {
