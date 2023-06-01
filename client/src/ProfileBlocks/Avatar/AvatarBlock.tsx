@@ -5,12 +5,15 @@ import { TextComponent } from '../../common/text/TextComponent';
 import { ButtonComponent } from '../../common/button/ButtonComponent';
 import { useUserStatus } from '../../hooks/useUserStatus';
 import { Circle } from '@mui/icons-material';
-import { UserStatus } from '@spotify/sockets-shared';
+import { UserStatus } from '@yumasoft-spotify/socket-sdk';
+import { useAppSelector } from '../../hooks/redux';
+import { UserModel } from '../../types/models';
 
 interface IProps {}
 
 export const AvatarBlock: FC<IProps> = (_) => {
-  const { user, status } = useUserStatus();
+  const user = useAppSelector<UserModel>((state) => state.user as UserModel);
+  const { status } = useUserStatus(user);
   const navigate = useNavigate();
 
   const clickEditProfile = () => {

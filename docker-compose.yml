@@ -20,23 +20,6 @@ services:
     networks:
       - private
 
-  socket_sdk:
-    profiles:
-      - 'db'
-      - 'socket-server'
-      - 'server'
-      - 'dev'
-      - 'prod'
-    restart: on-failure
-    build:
-      context: ./socket-sdk
-#    ports:
-#      - '5432:5432'
-    volumes:
-      - ./socket-sdk:/app/socket-sdk
-    networks:
-      - private
-
   socket_server_dev:
     profiles:
       - 'socket-server'
@@ -56,9 +39,6 @@ services:
       PORT: '8888'
     depends_on:
       - db
-      - socket_sdk
-    links:
-      - socket_sdk
     networks:
       - private
 

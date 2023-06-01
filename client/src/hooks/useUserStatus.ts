@@ -1,11 +1,9 @@
 import { useSockets } from './useSockets';
 import { useEffect, useState } from 'react';
-import { useAppSelector } from './redux';
 import { UserModel } from '../types/models';
 
-export const useUserStatus = () => {
+export const useUserStatus = (user: UserModel) => {
   const { userStatusOnUserPage } = useSockets();
-  const user = useAppSelector<UserModel>((state) => state.user as UserModel);
   const [status, setStatus] = useState(user.status);
 
   useEffect(() => {
@@ -16,6 +14,5 @@ export const useUserStatus = () => {
 
   return {
     status,
-    user,
   };
 };

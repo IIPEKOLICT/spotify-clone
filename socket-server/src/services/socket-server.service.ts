@@ -8,7 +8,7 @@ import {
   getSocketRoomName,
   getSocketRoomId,
   SocketBroadcastEvent,
-} from '@spotify/socket-sdk';
+} from '@yumasoft-spotify/socket-sdk';
 import { IncomeEventsMap, OutgoingEventsMap, SocketIncomeEventHandler } from '../types';
 
 export class SocketServerService {

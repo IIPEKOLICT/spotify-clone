@@ -28,12 +28,11 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "build:old": "rm -rf dist && tsc && cp -rp public/package.json dist/package.json",
     "start": "nodemon",
-    "expose": "npm run build && cd dist && npm link && cd ..",
-    "mount:server": "cd ../server && npm link @spotify/socket-sdk && cd ..",
-    "mount:socket-server": "cd ../socket-server && npm link @spotify/socket-sdk && cd ..",
-    "mount:client": "cd ../client && npm link @spotify/socket-sdk && cd ..",
+    "expose": "npm run build && npm link",
+    "mount:server": "cd ../server && npm link @yumasoft-spotify/socket-sdk && cd ..",
+    "mount:socket-server": "cd ../socket-server && npm link @yumasoft-spotify/socket-sdk && cd ..",
+    "mount:client": "cd ../client && npm link @yumasoft-spotify/socket-sdk && cd ..",
     "mount": "npm run mount:server && npm run mount:socket-server && npm run mount:client",
     "inject": "npm run expose && npm run mount"
   },

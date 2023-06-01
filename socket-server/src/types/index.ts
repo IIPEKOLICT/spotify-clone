@@ -1,4 +1,10 @@
-import { SocketEvent, SocketAuth, SocketData, SocketDataWithPayload, SocketBroadcastEvent } from '@spotify/socket-sdk';
+import {
+  SocketEvent,
+  SocketAuth,
+  SocketData,
+  SocketDataWithPayload,
+  SocketBroadcastEvent,
+} from '@yumasoft-spotify/socket-sdk';
 
 export type SocketIncomeEventHandler = (data: SocketAuth | SocketData | SocketDataWithPayload) => void;
 export type SocketOutgoingEventHandler = (data: object) => void;

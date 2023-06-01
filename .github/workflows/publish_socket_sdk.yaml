@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'feature/socket-server'
     paths:
       - 'socket-sdk/**'
 
