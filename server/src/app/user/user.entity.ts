@@ -2,6 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { EntityName, UserRole } from '../../constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { TimestampEntity } from '../../shared/entities/timestamp.entity';
+import { UserStatus } from '@yumasoft-spotify/socket-sdk';
 
 @Entity(EntityName.USER)
 export class UserEntity extends TimestampEntity {
@@ -32,7 +33,11 @@ export class UserEntity extends TimestampEntity {
   @Column({ name: 'is_banned', default: false })
   isBanned: boolean;
 
+  @ApiProperty({ type: 'online | offline' })
+  @Column({ default: UserStatus.OFFLINE })
+  status: UserStatus;
+
   @ApiProperty()
-  @Column({ name: 'last_activity_date', nullable: true })
-  lastActivityDate: Date | null;
+  @Column({ name: 'last_activity_at', nullable: true })
+  lastActivityAt: Date | null;
 }

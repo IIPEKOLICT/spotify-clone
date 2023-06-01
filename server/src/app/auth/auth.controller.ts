@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
-import { ApiOperationSummary, Endpoint, UserStatus } from '../../constants/enums';
+import { ApiOperationSummary, Endpoint } from '../../constants/enums';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { AuthService } from './auth.service';
@@ -11,8 +11,9 @@ import { User } from '../user/decorators/user.decorator';
 import { Response } from 'express';
 import { BadRequestError } from '../../errors/bad-request.error';
 import { UserMapper } from '../user/mappers/user.mapper';
-import { UserPageSocketService } from '../global/socket/services/user-page-socket.service';
 import { DefaultResponseDto } from '../../shared/dto/default-response.dto';
+import { SocketService } from '../global/socket/socket.service';
+import { UserStatus } from '@yumasoft-spotify/socket-sdk';
 
 @ApiTags(Endpoint.AUTH)
 @Controller(Endpoint.AUTH)
@@ -21,16 +22,17 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly userMapper: UserMapper,
-    private readonly userPageSocketService: UserPageSocketService,
+    private readonly socketService: SocketService,
   ) {}
 
   @ApiOperation({ summary: ApiOperationSummary.AUTH_REFRESH_TOKEN })
   @ApiResponse({ type: UserEntity })
   @Get('refresh')
   async updateToken(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
-    this.userPageSocketService.editUserStatus(user.id, UserStatus.ONLINE);
-    this.authService.injectJwtTokenIntoResponseCookies(response, user);
-    return this.userMapper.mapOne(user);
+    const updatedUser: UserEntity = await this.userService.updateById(user.id, { status: UserStatus.ONLINE });
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.ONLINE });
+    this.authService.injectJwtTokenIntoResponseCookies(response, updatedUser);
+    return this.userMapper.mapOne(updatedUser);
   }
 
   @ApiOperation({ summary: ApiOperationSummary.AUTH_LOGIN })
@@ -40,9 +42,10 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
-    this.userPageSocketService.editUserStatus(user.id, UserStatus.ONLINE);
-    this.authService.injectJwtTokenIntoResponseCookies(response, user);
-    return this.userMapper.mapOne(user);
+    const updatedUser: UserEntity = await this.userService.updateById(user.id, { status: UserStatus.ONLINE });
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.ONLINE });
+    this.authService.injectJwtTokenIntoResponseCookies(response, updatedUser);
+    return this.userMapper.mapOne(updatedUser);
   }
 
   @ApiOperation({ summary: ApiOperationSummary.AUTH_REGISTER })
@@ -57,9 +60,9 @@ export class AuthController {
       throw new BadRequestError('User with this email already exists');
     }
 
-    const user: UserEntity = await this.userService.create(dto);
+    const user: UserEntity = await this.userService.create({ ...dto, status: UserStatus.ONLINE });
 
-    this.userPageSocketService.editUserStatus(user.id, UserStatus.ONLINE);
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(user.id, { value: UserStatus.ONLINE });
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return this.userMapper.mapOne(user);
   }
@@ -69,8 +72,12 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   async logout(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<DefaultResponseDto> {
-    this.userPageSocketService.editUserStatus(user.id, UserStatus.OFFLINE);
-    await this.userService.updateById(user.id, { lastActivityDate: new Date() });
+    const updatedUser: UserEntity = await this.userService.updateById(user.id, {
+      status: UserStatus.OFFLINE,
+      lastActivityAt: new Date(),
+    });
+
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.OFFLINE });
     this.authService.removeJwtTokenFromResponseCookies(response);
     return DefaultResponseDto.new();
   }
@@ -83,8 +90,14 @@ export class AuthController {
     @User() user: UserEntity,
     @Res({ passthrough: true }) response: Response,
   ): Promise<DefaultResponseDto> {
-    this.userPageSocketService.editUserStatus(user.id, UserStatus.OFFLINE);
-    await this.userService.updateById(user.id, { lastActivityDate: new Date() });
+    console.log(`User ${user.id} canceled session`);
+
+    const updatedUser: UserEntity = await this.userService.updateById(user.id, {
+      status: UserStatus.OFFLINE,
+      lastActivityAt: new Date(),
+    });
+
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.OFFLINE });
     return DefaultResponseDto.new();
   }
 }

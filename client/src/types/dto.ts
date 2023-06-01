@@ -4,4 +4,6 @@ export type CreateUserRequestBody = Pick<UserModel, 'firstName' | 'lastName' | '
   password: string;
 };
 
+export type UpdateUserInfoRequestBody = Partial<CreateUserRequestBody>;
+
 export type LoginRequestBody = Pick<UserModel, 'firstName' | 'lastName'>;

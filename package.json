@@ -10,6 +10,7 @@
     "server:prod": "cd server && npm run start:prod",
     "socket-server:dev": "cd socket-server && npm run dev",
     "socket-server:prod": "cd socket-server && npm run prod",
+    "socket-sdk:inject": "cd socket-sdk && npm i && npm run inject && cd ..",
     "client:dev": "cd client && npm run start",
     "client:prod": "cd client && npm run build",
     "db": "docker-compose -p spotify-db --profile db up",

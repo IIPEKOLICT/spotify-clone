@@ -1,10 +1,8 @@
 import { FC } from 'react';
 import { Box } from '@mui/material';
 
-interface IProps {};
+interface IProps {}
 
 export const FriendsComponent: FC<IProps> = (props) => {
-  return (
-    <Box>FriendsComponent</Box>
-  );
+  return <Box>FriendsComponent</Box>;
 };

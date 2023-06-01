@@ -55,11 +55,6 @@ export enum ErrorMessage {
   BAD_REQUEST = 'Bad request',
 }
 
-export enum UserStatus {
-  ONLINE = 'online',
-  OFFLINE = 'offline',
-}
-
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',

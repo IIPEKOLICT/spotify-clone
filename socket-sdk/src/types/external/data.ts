@@ -1,4 +1,4 @@
-import { SocketEntity, SocketPlace } from './enums';
+import { SocketEntity, SocketPlace } from '../../enums/external/data';
 
 export type SocketAuth = {
   userId: number;

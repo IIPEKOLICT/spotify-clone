@@ -1,0 +1,47 @@
+name: 'Publish socket-sdk'
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'socket-sdk/**'
+
+env:
+  NPM_ACCESS_TOKEN: '${{ secrets.NPM_ACCESS_TOKEN }}'
+
+jobs:
+  Publish:
+    runs-on: 'ubuntu-latest'
+
+    permissions:
+      id-token: 'write'
+      contents: 'write'
+
+    steps:
+      - uses: 'actions/checkout@v3'
+      - uses: 'actions/setup-node@v3'
+        with:
+          node-version: '18.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@yumasoft-spotify'
+          always-auth: 'true'
+      - name: 'Setup git'
+        run: 'git config user.name "GitHub Action" && git config user.email "action@github.com"'
+      - name: 'Install modules'
+        run: 'cd socket-sdk && npm install'
+      - name: 'Setup .npmrc file'
+        run: 'cd socket-sdk && npm ci'
+      - name: 'Build'
+        run: 'cd socket-sdk && npm run build'
+      - name: 'Patch version'
+        run: 'cd socket-sdk && npm version patch'
+      - name: 'Publish'
+        run: 'cd socket-sdk && NODE_AUTH_TOKEN=${{ env.NPM_ACCESS_TOKEN }} npm publish --access public --provenance'
+      - name: 'Update main branch'
+        run: |
+          cd socket-sdk
+          git add .
+          git commit -m "update socket-sdk version"
+          git pull --rebase
+          git push

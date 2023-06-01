@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from "@mui/material";
-import { Routes } from "./routes";
-import { theme } from "./constants";
-import { authAPI } from "./services/AuthServices";
-import { useActions } from "./hooks/actions";
-import { MainLayout } from "./layouts/MainLayout";
-import { useAppSelector } from "./hooks/redux";
-import { AlertComponent } from "./common/alert/AlertComponent";
-import { LoaderComponent } from "./common/loader/LoaderComponent";
+import { useEffect, useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material';
+import { Routes } from './routes';
+import { theme } from './constants';
+import { authAPI } from './services/AuthService';
+import { useActions } from './hooks/actions';
+import { MainLayout } from './layouts/MainLayout';
+import { useAppSelector } from './hooks/redux';
+import { AlertComponent } from './common/alert/AlertComponent';
+import { LoaderComponent } from './common/loader/LoaderComponent';
+import { useSockets } from './hooks/useSockets';
+import { useCancelSession } from './hooks/useCancelSession';
 
 function App() {
   const [refresh, { data, isSuccess, isLoading }] = authAPI.useRefreshTokenMutation();
@@ -16,6 +18,20 @@ function App() {
   const userInfo = useAppSelector((state) => state.user);
   const notification = useAppSelector((state) => state.notification);
   const [showNotification, setShowNotification] = useState(false);
+
+  useCancelSession();
+
+  const { onApplicationInit, onApplicationDestroy, logout } = useSockets();
+
+  useEffect(() => onApplicationDestroy, []);
+
+  useEffect(() => {
+    if (userInfo?.['id']) {
+      onApplicationInit();
+    } else {
+      logout();
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     const cookie = document.cookie;
@@ -31,35 +47,30 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setShowNotification(false);
-      addNotification({type: "", message: ""});
+      addNotification({ type: '', message: '' });
     }, 3000);
   }, [showNotification, addNotification]);
 
   if (isLoading) {
-    return (
-      <LoaderComponent />
-    );
-  };
+    return <LoaderComponent />;
+  }
 
   return (
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <MainLayout>
-            <MainLayout.Slot name="content">
-              <Routes isAuth={!!userInfo?.id}></Routes>
-            </MainLayout.Slot>
-            <MainLayout.Slot name="notification">
-              {notification.type && notification.message &&
-                <AlertComponent
-                  type={notification.type}
-                  message={notification.message}
-                />
-              }
-            </MainLayout.Slot>
-          </MainLayout>
-        </ThemeProvider>
-      </BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <MainLayout>
+          <MainLayout.Slot name="content">
+            <Routes isAuth={!!userInfo?.id}></Routes>
+          </MainLayout.Slot>
+          <MainLayout.Slot name="notification">
+            {notification.type && notification.message && (
+              <AlertComponent type={notification.type} message={notification.message} />
+            )}
+          </MainLayout.Slot>
+        </MainLayout>
+      </ThemeProvider>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

@@ -28,3 +28,8 @@ export enum RoutePath {
   VIDEOS = '/videos',
   DEFAULT = '*',
 }
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}

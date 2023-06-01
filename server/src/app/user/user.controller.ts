@@ -61,7 +61,7 @@ export class UserController {
   @ApiResponse({ type: UserEntity })
   @Patch('current')
   async updateCurrent(@User() user: UserEntity, @Body() dto: UpdateUserDto): Promise<UserEntity> {
-    if (dto.email && (await this.userService.isExists({ email: dto.email }))) {
+    if (dto.email && dto.email !== user.email && (await this.userService.isExists({ email: dto.email }))) {
       throw new BadRequestError('User with this email already exists, choose another one');
     }
 

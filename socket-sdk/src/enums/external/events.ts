@@ -1,15 +1,6 @@
-export enum SocketPlace {
-  USER_PAGE = 'user-page',
-}
-
-export enum SocketEntity {
-  USER_STATUS = 'user-status',
-  POST = 'post',
-  AUDIO = 'audio',
-}
-
 export enum SocketEvent {
   AUTH = 'auth',
+  LOGOUT = 'logout',
   JOIN = 'join',
   JOINED = 'joined',
   NEW = 'new',
