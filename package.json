@@ -12,11 +12,11 @@
     "socket-server:prod": "cd socket-server && npm run prod",
     "client:dev": "cd client && npm run start",
     "client:prod": "cd client && npm run build",
-    "libs": "cd sockets-shared && npm i && npm run inject && cd ..",
+    "libs": "cd socket-sdk && npm i && npm run inject && cd ..",
     "db": "docker-compose -p spotify-db --profile db up",
     "client": "npm run libs && docker-compose -p spotify-client --profile client up --build",
     "server": "npm run libs && docker-compose -p spotify-server --profile server up --build",
-    "socket-server": "npm run libs && docker-compose -p spotify-socket-server --profile socket-server up --build",
+    "socket-server": "docker-compose -p spotify-socket-server --profile socket-server up --build",
     "dev": "npm run libs && docker-compose -p spotify-dev --profile dev up --build",
     "prod": "npm run libs && docker-compose -p spotify-prod --profile prod up --build"
   },

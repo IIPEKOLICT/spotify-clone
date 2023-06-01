@@ -1,10 +1,4 @@
-import {
-  SocketEvent,
-  SocketAuth,
-  SocketData,
-  SocketDataWithPayload,
-  SocketBroadcastEvent,
-} from '@spotify/sockets-shared';
+import { SocketEvent, SocketAuth, SocketData, SocketDataWithPayload, SocketBroadcastEvent } from '@spotify/socket-sdk';
 
 export type SocketIncomeEventHandler = (data: SocketAuth | SocketData | SocketDataWithPayload) => void;
 export type SocketOutgoingEventHandler = (data: object) => void;

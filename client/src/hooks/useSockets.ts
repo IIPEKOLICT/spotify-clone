@@ -1,7 +1,7 @@
 import { useAppSelector } from './redux';
 import { UserModel } from '../types/models';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { SocketClient, SocketSubscribeReturnType, ISocketInterceptor } from '@spotify/sockets-shared';
+import { SocketClient, SocketSubscribeReturnType, ISocketInterceptor } from '@spotify/socket-sdk';
 import { REACT_APP_SOCKET_SERVER_URL } from '../constants/environment';
 import { useActions } from './actions';
 
