@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { UserStatus } from '@spotify/sockets-shared';
+import { UserStatus } from '@yumasoft-spotify/socket-sdk';
 import { UserRole } from '../constants/enums';
 
 export type EntityModel = {

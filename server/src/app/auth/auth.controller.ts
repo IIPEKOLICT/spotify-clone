@@ -13,7 +13,7 @@ import { BadRequestError } from '../../errors/bad-request.error';
 import { UserMapper } from '../user/mappers/user.mapper';
 import { DefaultResponseDto } from '../../shared/dto/default-response.dto';
 import { SocketService } from '../global/socket/socket.service';
-import { UserStatus } from '@spotify/sockets-shared';
+import { UserStatus } from '@yumasoft-spotify/socket-sdk';
 
 @ApiTags(Endpoint.AUTH)
 @Controller(Endpoint.AUTH)

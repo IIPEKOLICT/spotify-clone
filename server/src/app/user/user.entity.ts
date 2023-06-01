@@ -2,7 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { EntityName, UserRole } from '../../constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { TimestampEntity } from '../../shared/entities/timestamp.entity';
-import { UserStatus } from '@spotify/sockets-shared';
+import { UserStatus } from '@yumasoft-spotify/socket-sdk';
 
 @Entity(EntityName.USER)
 export class UserEntity extends TimestampEntity {

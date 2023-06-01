@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { VoidCallback } from '@spotify/sockets-shared';
+import { VoidCallback } from '@yumasoft-spotify/socket-sdk';
 
 interface SocketHookInstanceData {
   interceptors: {
