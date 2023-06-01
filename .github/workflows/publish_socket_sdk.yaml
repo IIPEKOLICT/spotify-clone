@@ -39,13 +39,7 @@ jobs:
       - name: 'Publish'
         run: 'cd socket-sdk && NODE_AUTH_TOKEN=${{ env.NPM_ACCESS_TOKEN }} npm publish --access public --provenance'
       - name: 'Update subprojects dependencies'
-        run: |
-          cd socket-server
-          npm install @yumasoft-spotify/socket-sdk@latest
-          cd ../server
-          npm install @yumasoft-spotify/socket-sdk@latest
-          cd ../client
-          npm install @yumasoft-spotify/socket-sdk@latest
+        run: 'chmod +x scripts/upgrade_package_versions.sh && scripts/upgrade_package_versions.sh'
       - name: 'Update main branch'
         run: |
           git add .
