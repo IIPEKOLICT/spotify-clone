@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@iipekolict/coroutine": "^1.0.27",
+    "@evgenii-shcherbakov/coroutine": "^1.0.30",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -33,9 +33,9 @@
     "@yumasoft-spotify/socket-sdk": "^1.0.5",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
+    "mongodb": "^5.2.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "socket.io-client": "^4.6.1",

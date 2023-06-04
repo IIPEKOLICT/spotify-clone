@@ -7,7 +7,7 @@ export const useUserStatus = (user: UserModel) => {
   const [status, setStatus] = useState(user.status);
 
   useEffect(() => {
-    userStatusOnUserPage.subscribeOnEditEvent(user.id, ({ value }) => {
+    userStatusOnUserPage.subscribeOnEditEvent(user._id, ({ value }) => {
       setStatus(() => value);
     });
   }, []);

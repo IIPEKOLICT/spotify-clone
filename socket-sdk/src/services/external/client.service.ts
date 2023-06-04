@@ -2,7 +2,6 @@ import { Socket, io } from 'socket.io-client';
 import { SocketAuth, SocketDataWithPayload, SocketTarget } from '../../types/external/data';
 import { SocketEvent } from '../../enums/external/events';
 import { SubjectService } from '../internal/subject.service';
-import { SOCKET_SUBSCRIBE_STRATEGY } from '../../constants/internal/configuration';
 import { SocketBroadcastEvent } from '../../types/external/events';
 import { SOCKET_BROADCAST_EVENTS } from '../../constants/internal/events';
 import { IClientService, IInterceptorServiceExternal } from '../../interfaces/external/services';
@@ -10,6 +9,7 @@ import { DynamicService } from '../internal/dynamic.service';
 import { IDynamicService, IInterceptorService, ISubjectService } from '../../interfaces/internal/services';
 import { DynamicAPI } from '../../types/external/dynamic';
 import { InterceptorService } from '../internal/interceptor.service';
+import { SOCKET_SUBSCRIBE_STRATEGY } from '../../constants/internal/strategy';
 
 export class ClientService implements IClientService {
   protected readonly socketClient: Socket;

@@ -3,9 +3,9 @@ import { SocketBroadcastEvent } from '../../types/external/events';
 import { getRoomName } from '../../functions/external/getters';
 import { IClientServiceInternal, IInterceptorService, ISubjectService } from '../../interfaces/internal/services';
 import { SocketSubscriber, SocketSubscribeReturnType, VoidCallback } from '../../types/external/functions';
-import { SocketIdField, SocketScope } from '../../enums/internal/data';
 import { SubjectStore, SubjectStoreParsedId } from '../../types/internal/data';
-import { SocketEntity, SocketPlace } from '../../enums/external/data';
+import { SocketEntity, SocketPlace, SocketScope } from '../../enums/external/data';
+import { StrategyCaseTarget } from '../../types/internal/strategy';
 
 export class SubjectService implements ISubjectService {
   private readonly store: SubjectStore = {};
@@ -20,32 +20,21 @@ export class SubjectService implements ISubjectService {
   }
 
   private parseId(storeId: string): SubjectStoreParsedId {
-    const [event, roomId, scope] = storeId.split(':::');
-    const [place, entity, id] = roomId.split(':');
+    const [event, roomName] = storeId.split(':::');
+    const [place, entity, scope, id] = roomName.split(':');
 
     return {
       event: (event ?? '') as SocketBroadcastEvent,
-      roomId: roomId ?? '',
-      roomName: `${roomId}:::${scope}`,
+      roomName,
       scope: (scope ?? '') as SocketScope,
       place: (place ?? '') as SocketPlace,
       entity: (entity ?? '') as SocketEntity,
-      id: typeof id === 'string' ? +id : -1,
+      id,
     };
-  }
-
-  private convertScopeToIdField(scope: SocketScope): SocketIdField {
-    return scope.toString() === SocketScope.USER.toString() ? SocketIdField.USER_ID : SocketIdField.ENTITY_ID;
   }
 
   private getTargetFromRoomName(roomName: string): SocketTarget {
-    const { place, entity, scope, id } = this.parseId(`:::${roomName}`);
-
-    return {
-      place,
-      entity,
-      [this.convertScopeToIdField(scope)]: id,
-    };
+    return this.parseId(`:::${roomName}`);
   }
 
   subscribe<Payload extends object | undefined = undefined>(
@@ -95,14 +84,12 @@ export class SubjectService implements ISubjectService {
     });
   }
 
-  unsubscribeFromCaseAndEvent(event: SocketBroadcastEvent, target: SocketTarget, scope: SocketScope) {
+  unsubscribeFromCaseAndEvent(event: SocketBroadcastEvent, target: StrategyCaseTarget) {
     Object.keys(this.store).forEach((id: string) => {
       const { event: storeEvent, place, entity, scope, roomName } = this.parseId(id);
 
-      const targetScope: SocketScope = target.entityId ? SocketScope.ENTITY : SocketScope.USER;
-
       const currentParams = `${storeEvent}|${place}|${entity}|${scope}`;
-      const targetParams = `${event}|${target.place}|${target.entity}|${targetScope}`;
+      const targetParams = `${event}|${target.place}|${target.entity}|${target.scope}`;
 
       if (currentParams === targetParams) {
         this.store[id] = [];
@@ -111,14 +98,12 @@ export class SubjectService implements ISubjectService {
     });
   }
 
-  unsubscribeFromCase(target: SocketTarget, scope: SocketScope) {
+  unsubscribeFromCase(target: StrategyCaseTarget) {
     Object.keys(this.store).forEach((id: string) => {
       const { place, entity, scope, roomName } = this.parseId(id);
 
-      const targetScope: SocketScope = target.entityId ? SocketScope.ENTITY : SocketScope.USER;
-
       const currentParams = `${place}|${entity}|${scope}`;
-      const targetParams = `${target.place}|${target.entity}|${targetScope}`;
+      const targetParams = `${target.place}|${target.entity}|${target.scope}`;
 
       if (currentParams === targetParams) {
         this.store[id] = [];

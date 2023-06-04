@@ -20,8 +20,8 @@ export class AuthService {
   }
 
   private generateToken(user: UserEntity): string {
-    const { id, createdAt } = user;
-    return this.jwtService.sign({ id, createdAt });
+    const { _id, createdAt } = user;
+    return this.jwtService.sign({ _id, createdAt });
   }
 
   injectJwtTokenIntoResponseCookies(response: Response, user: UserEntity) {

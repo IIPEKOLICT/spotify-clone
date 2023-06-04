@@ -1,10 +1,11 @@
 import { SocketEvent } from './enums/external/events';
 import { SocketEntity, SocketPlace } from './enums/external/data';
 import { UserStatus } from './enums/external/model';
-import { getId as getSocketRoomId, getRoomName as getSocketRoomName } from './functions/external/getters';
-import { IClientService, IInterceptorServiceExternal } from './interfaces/external/services';
+import { getId, getRoomName } from './functions/external/getters';
+import { IClientService, IInterceptorServiceExternal, IServerService } from './interfaces/external/services';
 import { ISocketInterceptor } from './interfaces/external/custom';
 import { ClientService as SocketClient } from './services/external/client.service';
+import { ServerService as SocketServer } from './services/external/server.service';
 import { SocketAuth, SocketData, SocketTarget, SocketDataWithPayload } from './types/external/data';
 import { DynamicAPI } from './types/external/dynamic';
 import { SocketBroadcastEvent } from './types/external/events';
@@ -25,8 +26,8 @@ export {
   SocketTarget,
   SocketDataWithPayload,
   SocketClient,
-  getSocketRoomId,
-  getSocketRoomName,
+  getId,
+  getRoomName,
   SocketBroadcastEvent,
   SocketSubscriber,
   SocketSubscribeReturnType,
@@ -38,4 +39,6 @@ export {
   UserStatus,
   IInterceptorServiceExternal,
   ISocketInterceptor,
+  IServerService,
+  SocketServer,
 };

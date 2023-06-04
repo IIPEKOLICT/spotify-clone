@@ -26,7 +26,7 @@ function App() {
   useEffect(() => onApplicationDestroy, []);
 
   useEffect(() => {
-    if (userInfo?.['id']) {
+    if (userInfo?.['_id']) {
       onApplicationInit();
     } else {
       logout();
@@ -60,7 +60,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <MainLayout>
           <MainLayout.Slot name="content">
-            <Routes isAuth={!!userInfo?.id}></Routes>
+            <Routes isAuth={!!userInfo?._id}></Routes>
           </MainLayout.Slot>
           <MainLayout.Slot name="notification">
             {notification.type && notification.message && (

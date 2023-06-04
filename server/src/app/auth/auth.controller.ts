@@ -30,7 +30,11 @@ export class AuthController {
   @Get('refresh')
   async updateToken(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
     const updatedUser: UserEntity = await this.userService.updateById(user.id, { status: UserStatus.ONLINE });
-    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.ONLINE });
+
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id.toString(), {
+      value: UserStatus.ONLINE,
+    });
+
     this.authService.injectJwtTokenIntoResponseCookies(response, updatedUser);
     return this.userMapper.mapOne(updatedUser);
   }
@@ -43,7 +47,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@User() user: UserEntity, @Res({ passthrough: true }) response: Response): Promise<UserEntity> {
     const updatedUser: UserEntity = await this.userService.updateById(user.id, { status: UserStatus.ONLINE });
-    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.ONLINE });
+
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id.toString(), {
+      value: UserStatus.ONLINE,
+    });
+
     this.authService.injectJwtTokenIntoResponseCookies(response, updatedUser);
     return this.userMapper.mapOne(updatedUser);
   }
@@ -62,7 +70,7 @@ export class AuthController {
 
     const user: UserEntity = await this.userService.create({ ...dto, status: UserStatus.ONLINE });
 
-    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(user.id, { value: UserStatus.ONLINE });
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(user.id.toString(), { value: UserStatus.ONLINE });
     this.authService.injectJwtTokenIntoResponseCookies(response, user);
     return this.userMapper.mapOne(user);
   }
@@ -77,7 +85,10 @@ export class AuthController {
       lastActivityAt: new Date(),
     });
 
-    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.OFFLINE });
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id.toString(), {
+      value: UserStatus.OFFLINE,
+    });
+
     this.authService.removeJwtTokenFromResponseCookies(response);
     return DefaultResponseDto.new();
   }
@@ -97,7 +108,10 @@ export class AuthController {
       lastActivityAt: new Date(),
     });
 
-    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id, { value: UserStatus.OFFLINE });
+    this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(updatedUser.id.toString(), {
+      value: UserStatus.OFFLINE,
+    });
+
     return DefaultResponseDto.new();
   }
 }

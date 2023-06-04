@@ -6,7 +6,7 @@ import { REACT_APP_SOCKET_SERVER_URL } from '../constants/environment';
 import { useActions } from './actions';
 
 const client = new SocketClient(REACT_APP_SOCKET_SERVER_URL, {
-  userId: -1,
+  userId: 'client',
   username: 'Client',
 });
 
@@ -27,7 +27,7 @@ export const useSockets = () => {
 
   const applicationScope = {
     onInit() {
-      client.onInit(user?.id ? { userId: user.id, username: `${user.firstName} ${user.lastName}` } : true);
+      client.onInit(user?._id ? { userId: user._id, username: `${user.firstName} ${user.lastName}` } : true);
     },
     onDestroy() {
       client.onDestroy();

@@ -1,22 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { DeepPartial, Repository } from 'typeorm';
+import { DataSource, DeepPartial, ObjectId } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CrudService } from '../../shared/services/crud.service';
 import { CryptographyService } from '../cryptography/cryptography.service';
 import { EntityName } from '../../constants/enums';
-import { Coroutine } from '@iipekolict/coroutine';
+import { Coroutine } from '@evgenii-shcherbakov/coroutine';
 
 @Injectable()
 export class UserService extends CrudService<UserEntity> {
-  constructor(
-    @InjectRepository(UserEntity) repository: Repository<UserEntity>,
-    private readonly cryptographyService: CryptographyService,
-  ) {
-    super(repository, EntityName.USER);
+  constructor(protected readonly dataSource: DataSource, protected readonly cryptographyService: CryptographyService) {
+    super(dataSource, EntityName.USER);
   }
 
-  async updateById(id: number, dto: DeepPartial<UserEntity>): Promise<UserEntity> {
+  async updateById(id: ObjectId | string, dto: DeepPartial<UserEntity>): Promise<UserEntity> {
     if (dto.password) {
       dto.password = await this.cryptographyService.hash(dto.password);
     }

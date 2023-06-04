@@ -17,7 +17,7 @@ export const AvatarBlock: FC<IProps> = (_) => {
   const navigate = useNavigate();
 
   const clickEditProfile = () => {
-    navigate(`/profile/${user.id}`);
+    navigate(`/profile/${user._id}`);
   };
 
   return (

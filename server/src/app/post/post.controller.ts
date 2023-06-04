@@ -34,7 +34,7 @@ export class PostController {
   @ApiOperation({ summary: ApiOperationSummary.POSTS_DELETE_BY_ID })
   @ApiResponse({ type: DefaultResponseDto })
   @Delete(':postId')
-  async deleteById(@Param('postId', ParseIntPipe) postId: number): Promise<DefaultResponseDto> {
+  async deleteById(@Param('postId') postId: string): Promise<DefaultResponseDto> {
     await this.postService.deleteById(postId);
     return DefaultResponseDto.new();
   }
@@ -42,7 +42,7 @@ export class PostController {
   @ApiOperation({ summary: ApiOperationSummary.POSTS_UPDATE_TEXT })
   @ApiResponse({ type: PostEntity })
   @Patch(':postId/text')
-  async updateText(@Param('postId', ParseIntPipe) postId: number, @Body() dto: CrudPostDto): Promise<PostEntity> {
+  async updateText(@Param('postId') postId: string, @Body() dto: CrudPostDto): Promise<PostEntity> {
     return this.postService.updateById(postId, dto);
   }
 }

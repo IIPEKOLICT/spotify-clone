@@ -10,7 +10,7 @@ export class EnvironmentService {
   }
 
   get DATABASE_URL(): string {
-    return this.configService.get('DATABASE_URL') ?? 'postgres://user:password@db:5432/dbname';
+    return this.configService.get('DATABASE_URL') ?? 'mongodb://localhost:27017/main';
   }
 
   get JWT_SECRET(): string {

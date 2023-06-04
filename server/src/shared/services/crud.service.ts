@@ -1,8 +1,18 @@
-import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import { DataSource, DeepPartial, FindOptionsWhere, MongoRepository } from 'typeorm';
+import { ObjectId } from 'mongodb';
 import { EntityNotFoundError } from '../../errors/entity-not-found.error';
+import { TimestampEntity } from '../entities/timestamp.entity';
 
-export abstract class CrudService<Entity extends { id: number }> {
-  protected constructor(protected readonly repository: Repository<Entity>, protected readonly entityName: string) {}
+export abstract class CrudService<Entity extends TimestampEntity> {
+  protected readonly repository: MongoRepository<Entity>;
+
+  protected constructor(protected readonly dataSource: DataSource, protected readonly entityName: string) {
+    this.repository = dataSource.getMongoRepository<Entity>(entityName);
+  }
+
+  protected parseId(id: ObjectId | string): ObjectId {
+    return typeof id === 'string' ? ObjectId.createFromHexString(id) : id;
+  }
 
   async isExists(filter?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<boolean> {
     return this.repository.exist({ where: filter });
@@ -17,22 +27,22 @@ export abstract class CrudService<Entity extends { id: number }> {
   }
 
   async getPaginated(
-    filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[],
+    filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[] = {},
     limit?: number,
     skip?: number,
   ): Promise<Entity[]> {
     return this.repository.find({ where: filter, skip, take: limit });
   }
 
-  async getById(id: number): Promise<Entity> {
-    return this.getOne({ id } as FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]);
+  async getById(id: ObjectId | string): Promise<Entity> {
+    return this.getOne({ _id: this.parseId(id) } as FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]);
   }
 
-  async getByIdOrNull(id: number): Promise<Entity | null> {
-    return this.getOneOrNull({ id } as FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]);
+  async getByIdOrNull(id: ObjectId | string): Promise<Entity | null> {
+    return this.getOneOrNull({ _id: this.parseId(id) } as FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]);
   }
 
-  async getOne(filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity> {
+  async getOne(filter?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity> {
     const entity: Entity | undefined = await this.repository.findOneBy(filter);
 
     if (!entity) {
@@ -42,7 +52,7 @@ export abstract class CrudService<Entity extends { id: number }> {
     return entity;
   }
 
-  async getOneOrNull(filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity | null> {
+  async getOneOrNull(filter: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[] = {}): Promise<Entity | null> {
     return (await this.repository.findOneBy(filter)) ?? null;
   }
 
@@ -54,21 +64,23 @@ export abstract class CrudService<Entity extends { id: number }> {
     return this.repository.save(entities);
   }
 
-  async updateById(id: number, dto: DeepPartial<Entity>): Promise<Entity> {
-    await this.repository.update(id, dto as any);
-    return this.getById(id);
+  async updateById(id: ObjectId | string, dto: DeepPartial<Entity>): Promise<Entity> {
+    const entityId: ObjectId = this.parseId(id);
+    await this.repository.update(entityId, dto as any);
+    return this.getById(entityId);
   }
 
-  async updateByIdOrNull(id: number, dto: DeepPartial<Entity>): Promise<Entity | null> {
-    await this.repository.update(id, dto as any);
-    return this.getByIdOrNull(id);
+  async updateByIdOrNull(id: ObjectId | string, dto: DeepPartial<Entity>): Promise<Entity | null> {
+    const entityId: ObjectId = this.parseId(id);
+    await this.repository.update(entityId, dto as any);
+    return this.getByIdOrNull(entityId);
   }
 
   async updateMany(filter: FindOptionsWhere<Entity>, dto: Partial<Entity>) {
     await this.repository.update(filter, dto as any);
   }
 
-  async deleteById(id: number): Promise<void> {
-    await this.repository.softDelete(id);
+  async deleteById(id: ObjectId | string): Promise<void> {
+    await this.repository.softDelete(this.parseId(id));
   }
 }
