@@ -24,4 +24,20 @@ export class EnvironmentService {
   get SOCKET_SERVER_URL(): string {
     return this.configService.get('SOCKET_SERVER_URL') ?? 'ws://localhost:8888';
   }
+
+  get GOOGLE_PROJECT_ID(): string {
+    return this.configService.getOrThrow('GOOGLE_PROJECT_ID');
+  }
+
+  get GOOGLE_PRIVATE_KEY(): string {
+    return this.configService.getOrThrow('GOOGLE_PRIVATE_KEY');
+  }
+
+  get GOOGLE_CLIENT_EMAIL(): string {
+    return this.configService.getOrThrow('GOOGLE_CLIENT_EMAIL');
+  }
+
+  get GOOGLE_BUCKET_NAME(): string {
+    return this.configService.getOrThrow('GOOGLE_BUCKET_NAME');
+  }
 }

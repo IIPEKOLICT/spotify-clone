@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@evgenii-shcherbakov/coroutine": "^1.0.30",
+    "@google-cloud/storage": "^6.10.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -33,6 +34,7 @@
     "@yumasoft-spotify/socket-sdk": "^1.0.5",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
+    "firebase-admin": "^11.9.0",
     "mongodb": "^5.2.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

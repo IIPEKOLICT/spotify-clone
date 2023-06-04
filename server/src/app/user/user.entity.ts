@@ -25,7 +25,6 @@ export class UserEntity extends TimestampEntity {
   profilePicturePath?: string;
 
   @ApiProperty({ nullable: true })
-  @Column({ nullable: true })
   profilePicture?: string;
 
   @ApiProperty({ enum: UserRole })
