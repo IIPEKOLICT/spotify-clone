@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "build:railway": "npm i && npm run build",
+    "build:deploy": "npm install --omit=dev && npm run build",
     "prod": "node dist/main.js"
   },
   "dependencies": {

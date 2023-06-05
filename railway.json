@@ -1,8 +1,9 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
+    "watchPatterns": ["socket-server/src/**", "socket-server/package.json"],
     "builder": "NIXPACKS",
-    "buildCommand": "cd socket-server && npm run build:railway"
+    "buildCommand": "cd socket-server && npm run build:deploy"
   },
   "deploy": {
     "startCommand": "cd socket-server && npm run prod",
