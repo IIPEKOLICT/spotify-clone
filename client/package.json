@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Yumasoft-spotify client",
-  "author": "",
+  "author": "Michail Zusko",
   "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.10.8",
