@@ -43,7 +43,6 @@ services:
     restart: on-failure
     build:
       context: ./server
-      dockerfile: Dockerfile.dev
     ports:
       - '8000:8000'
     volumes:
@@ -54,14 +53,11 @@ services:
     environment:
       NODE_ENV: 'development'
       PORT: '8000'
-      SOCKET_SERVER_URL: 'ws://socket_server_dev:8888'
+      SOCKET_SERVER_URL: 'ws://socket_server:8888'
       DATABASE_URL: 'mongodb://db:27017/main'
     depends_on:
       - db
-      - socket_server_dev
-    links:
-      - db
-      - socket_server_dev
+      - socket_server
     networks:
       - private
 
@@ -72,7 +68,6 @@ services:
     restart: on-failure
     build:
       context: ./client
-      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
@@ -83,8 +78,12 @@ services:
       CI: 'true'
       PORT: '3000'
       NODE_ENV: 'development'
-      REACT_APP_API_URL: 'http://server_dev:8000'
-      SOCKET_SERVER_URL: 'ws://socket_server_dev:8888'
+      REACT_APP_API_URL: 'http://server:8000'
+      SOCKET_SERVER_URL: 'ws://socket_server:8888'
+    depends_on:
+      - db
+      - socket_server
+      - server
     networks:
       - private
 
