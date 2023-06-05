@@ -11,11 +11,12 @@ import { AlertComponent } from './common/alert/AlertComponent';
 import { LoaderComponent } from './common/loader/LoaderComponent';
 import { useSockets } from './hooks/useSockets';
 import { useCancelSession } from './hooks/useCancelSession';
+import { UserModel } from './types/models';
 
 function App() {
   const [refresh, { data, isSuccess, isLoading }] = authAPI.useRefreshTokenMutation();
   const { addUser, addNotification } = useActions();
-  const userInfo = useAppSelector((state) => state.user);
+  const userInfo = useAppSelector((state) => state.user as UserModel | undefined);
   const notification = useAppSelector((state) => state.notification);
   const [showNotification, setShowNotification] = useState(false);
 
@@ -26,7 +27,7 @@ function App() {
   useEffect(() => onApplicationDestroy, []);
 
   useEffect(() => {
-    if (userInfo?.['_id']) {
+    if (userInfo?._id) {
       onApplicationInit();
     } else {
       logout();
