@@ -8,6 +8,7 @@ on:
       - 'client/**'
 
 env:
+  CI: 'true'
   REACT_APP_SERVER_URL: '${{ secrets.BACKEND_URL }}'
   REACT_APP_SOCKET_SERVER_URL: '${{ secrets.SOCKET_SERVER_URL }}'
 
