@@ -5,7 +5,7 @@
     "buildCommand": "cd socket-server && npm run build:railway"
   },
   "deploy": {
-    "startCommand": "npm run prod",
+    "startCommand": "cd socket-server && npm run prod",
     "healthcheckPath": "/status",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE"
