@@ -7,3 +7,8 @@ export enum SocketEntity {
   POST = 'post',
   AUDIO = 'audio',
 }
+
+export enum SocketScope {
+  ENTITY = 'entity',
+  USER = 'user',
+}

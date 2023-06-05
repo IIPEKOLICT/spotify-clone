@@ -1,72 +1,43 @@
-import { SOCKET_SUBSCRIBE_STRATEGY } from '../../constants/internal/configuration';
 import { ExternalSocketSubscribeMethod, ExternalSocketTriggerMethod, VoidCallback } from './functions';
-import { SocketEvent } from '../../enums/external/events';
-import {
-  SocketBroadcastTypingPayloadEvent,
-  SocketBroadcastWithoutPayloadEvent,
-  SocketBroadcastPayloadEvent,
-  SocketBroadcastIdPayloadEvent,
-} from '../internal/events';
-import { IdEventPayload, TypingEventPayload } from '../internal/payload';
-import { SocketBroadcastEvent } from './events';
-// import { UserStatus } from '../../enums/external/model';
-import { SubscribeStrategyCase } from '../internal/data';
+import { StrategyCaseEventPayload } from '../internal/strategy';
+import { SOCKET_SUBSCRIBE_STRATEGY } from '../../constants/internal/strategy';
 
 type StrategyType = typeof SOCKET_SUBSCRIBE_STRATEGY;
 
 type StrategyCases = Extract<keyof StrategyType, string>;
 
-type PayloadType<Case extends StrategyCases> = StrategyType[Case] extends SubscribeStrategyCase<infer Generic>
-  ? Generic
-  : never;
+type PayloadType<
+  Case extends StrategyCases,
+  Event extends StrategyCaseEvents<Case>,
+> = StrategyType[Case]['events'][Event] extends StrategyCaseEventPayload<infer Generic> ? Generic : never;
 
-type SubscribeModule<Events extends SocketEvent, Payload extends object | undefined = undefined> = {
-  [Event in Events as `subscribeOn${Capitalize<Event>}Event`]: ExternalSocketSubscribeMethod<Payload>;
+type StrategyCaseEvents<Case extends StrategyCases> = keyof StrategyType[Case]['events'] & string;
+
+type SubscribeModule<Case extends StrategyCases> = {
+  [Event in StrategyCaseEvents<Case> as `subscribeOn${Capitalize<Event>}Event`]: ExternalSocketSubscribeMethod<
+    PayloadType<Case, Event>
+  >;
 };
 
-type UnsubscribeEventModule = {
-  [Event in SocketBroadcastEvent as `unsubscribeFromAll${Capitalize<Event>}EventRooms`]: VoidCallback;
+type UnsubscribeEventModule<Case extends StrategyCases> = {
+  [Event in StrategyCaseEvents<Case> as `unsubscribeFromAll${Capitalize<Event>}EventRooms`]: StrategyType[Case]['events'][Event] extends undefined
+    ? never
+    : VoidCallback;
 };
 
 type UnsubscribeCaseModule = {
   unsubscribeFromAllEvents(): void;
 };
 
-type TriggerModule<Events extends SocketEvent, Payload extends object | undefined = undefined> = {
-  [Event in Events as `trigger${Capitalize<Event>}Event`]: ExternalSocketTriggerMethod<Payload>;
+type TriggerModule<Case extends StrategyCases> = {
+  [Event in StrategyCaseEvents<Case> as `trigger${Capitalize<Event>}Event`]: ExternalSocketTriggerMethod<
+    PayloadType<Case, Event>
+  >;
 };
 
 export type DynamicAPI = {
-  [Case in StrategyCases]: SubscribeModule<SocketBroadcastPayloadEvent, PayloadType<Case>> &
-    SubscribeModule<SocketBroadcastTypingPayloadEvent, TypingEventPayload> &
-    SubscribeModule<SocketBroadcastIdPayloadEvent, IdEventPayload> &
-    SubscribeModule<SocketBroadcastWithoutPayloadEvent> &
-    UnsubscribeEventModule &
+  [Case in StrategyCases]: SubscribeModule<Case> &
+    UnsubscribeEventModule<Case> &
     UnsubscribeCaseModule &
-    TriggerModule<SocketBroadcastPayloadEvent, PayloadType<Case>> &
-    TriggerModule<SocketBroadcastTypingPayloadEvent, TypingEventPayload> &
-    TriggerModule<SocketBroadcastIdPayloadEvent, IdEventPayload> &
-    TriggerModule<SocketBroadcastWithoutPayloadEvent>;
+    TriggerModule<Case>;
 };
-//
-// const dynamic: DynamicAPI = {};
-//
-// const { roomName, unsubscribe } = dynamic.userStatusOnUserPage.subscribeOnNewEvent(2, (data) => {});
-// dynamic.userStatusOnUserPage.subscribeOnNewEvent(1, (data) => {});
-// dynamic.userStatusOnUserPage.subscribeOnRemove((data) => {});
-// dynamic.userStatusOnUserPage.subscribeOnTyping((data) => {});
-// dynamic.userStatusOnUserPage.subscribeOnStop_typing((data) => {});
-// dynamic.userStatusOnUserPage.subscribeOnJoined((data) => {});
-// dynamic.userStatusOnUserPage.unsubscribeFromAllNewRooms();
-// dynamic.userStatusOnUserPage.unsubscribeFromAllEditRooms();
-// dynamic.userStatusOnUserPage.unsubscribeFromAllJoinedRooms();
-// dynamic.userStatusOnUserPage.unsubscribeFromAllRemoveRooms();
-// dynamic.userStatusOnUserPage.unsubscribeFromAllTypingRooms();
-// dynamic.userStatusOnUserPage.unsubscribeFromAllStop_typingRooms();
-// dynamic.userStatusOnUserPage.unsubscribeFromAllEvents();
-// dynamic.userStatusOnUserPage.triggerNewEvent(1, { value: UserStatus.ONLINE });
-// dynamic.userStatusOnUserPage.triggerEditEvent(1, { value: UserStatus.ONLINE });
-// dynamic.userStatusOnUserPage.triggerRemoveEvent(1, { id: 2 });
-// dynamic.userStatusOnUserPage.triggerTypingEvent(1, { userId: 1, username: 'Oleg' });
-// dynamic.userStatusOnUserPage.triggerStop_typingEvent(1, { userId: 1, username: 'Oleg' });
-// dynamic.userStatusOnUserPage.triggerJoinedEvent(1);

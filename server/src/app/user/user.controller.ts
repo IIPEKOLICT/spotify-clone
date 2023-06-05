@@ -1,15 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ApiOperationSummary, Endpoint, UserRole } from '../../constants/enums';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
@@ -19,11 +8,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { DefaultResponseDto } from '../../shared/dto/default-response.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { StorageService } from '../storage/storage.service';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { BadRequestError } from '../../errors/bad-request.error';
 import { UserMapper } from './mappers/user.mapper';
+import { FirebaseStorageService } from '../firebase/services/firebase-storage.service';
+import { extname } from 'path';
+import { RuntimeException } from '@nestjs/core/errors/exceptions';
 
 @ApiTags(Endpoint.USERS)
 @Controller(Endpoint.USERS)
@@ -31,7 +22,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly userMapper: UserMapper,
-    private readonly storageService: StorageService,
+    private readonly firebaseStorageService: FirebaseStorageService,
   ) {}
 
   @ApiOperation({ summary: ApiOperationSummary.USERS_GET_ALL })
@@ -82,8 +73,11 @@ export class UserController {
   @UseInterceptors(FileInterceptor('picture'))
   @Patch('current/picture')
   async updateCurrentPicture(@User() user: UserEntity, @UploadedFile() file: Express.Multer.File): Promise<UserEntity> {
-    const link: string = await this.storageService.saveProfilePicture(user.id, file);
-    const updatedUser: UserEntity = await this.userService.updateById(user.id, { profilePicture: link });
+    const path = `/users/${user.id}/profile-picture/image${extname(file.originalname)}`;
+
+    await this.firebaseStorageService.save(path, file.buffer);
+    const updatedUser: UserEntity = await this.userService.updateById(user.id, { profilePicturePath: path });
+
     return this.userMapper.mapOne(updatedUser);
   }
 
@@ -91,8 +85,13 @@ export class UserController {
   @ApiResponse({ type: UserEntity })
   @Delete('current/picture')
   async deleteCurrentPicture(@User() user: UserEntity): Promise<UserEntity> {
-    await this.storageService.removeProfilePicture(user.id);
-    const updatedUser: UserEntity = await this.userService.updateById(user.id, { profilePicture: null });
+    if (!user.profilePicturePath) {
+      throw new RuntimeException(`User haven't profile picture`);
+    }
+
+    await this.firebaseStorageService.delete(user.profilePicturePath);
+    const updatedUser: UserEntity = await this.userService.updateById(user.id, { profilePicturePath: null });
+
     return this.userMapper.mapOne(updatedUser);
   }
 
@@ -100,7 +99,7 @@ export class UserController {
   @ApiResponse({ type: DefaultResponseDto })
   @Roles(UserRole.ADMIN)
   @Delete(':userId')
-  async deleteUser(@Param('userId', ParseIntPipe) userId: number): Promise<DefaultResponseDto> {
+  async deleteUser(@Param('userId') userId: string): Promise<DefaultResponseDto> {
     await this.userService.deleteById(userId);
     return DefaultResponseDto.new();
   }
@@ -109,7 +108,7 @@ export class UserController {
   @ApiResponse({ type: UserEntity })
   @Roles(UserRole.ADMIN)
   @Patch(':userId/ban')
-  async banUser(@Param('userId', ParseIntPipe) userId: number): Promise<UserEntity> {
+  async banUser(@Param('userId') userId: string): Promise<UserEntity> {
     const user: UserEntity = await this.userService.getById(userId);
     const updatedUser: UserEntity = await this.userService.updateById(userId, { isBanned: !user.isBanned });
     return this.userMapper.mapOne(updatedUser);
@@ -119,10 +118,7 @@ export class UserController {
   @ApiResponse({ type: UserEntity })
   @Roles(UserRole.ADMIN)
   @Patch(':userId/role')
-  async updateUserRole(
-    @Param('userId', ParseIntPipe) userId: number,
-    @Body() body: UpdateUserRoleDto,
-  ): Promise<UserEntity> {
+  async updateUserRole(@Param('userId') userId: string, @Body() body: UpdateUserRoleDto): Promise<UserEntity> {
     return this.userMapper.mapOne(await this.userService.updateById(userId, body));
   }
 }

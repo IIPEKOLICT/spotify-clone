@@ -7,37 +7,39 @@ import { UserStatus } from '@yumasoft-spotify/socket-sdk';
 @Entity(EntityName.USER)
 export class UserEntity extends TimestampEntity {
   @ApiProperty()
-  @Column({ name: 'first_name', default: '' })
+  @Column({ default: '' })
   firstName: string;
 
   @ApiProperty()
-  @Column({ name: 'last_name', default: '' })
+  @Column({ default: '' })
   lastName: string;
 
   @ApiProperty()
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
-  @ApiProperty({ type: 'string | null' })
-  @Column({ name: 'profile_picture', nullable: true })
-  profilePicture: string | null;
+  @Column({ nullable: true })
+  profilePicturePath?: string;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
+  profilePicture?: string;
+
+  @ApiProperty({ enum: UserRole })
   @Column({ default: UserRole.USER })
   role: UserRole;
 
   @ApiProperty()
-  @Column({ name: 'is_banned', default: false })
+  @Column({ default: false })
   isBanned: boolean;
 
-  @ApiProperty({ type: 'online | offline' })
+  @ApiProperty({ enum: UserStatus })
   @Column({ default: UserStatus.OFFLINE })
   status: UserStatus;
 
-  @ApiProperty()
-  @Column({ name: 'last_activity_at', nullable: true })
-  lastActivityAt: Date | null;
+  @ApiProperty({ nullable: true })
+  @Column({ nullable: true })
+  lastActivityAt?: Date;
 }

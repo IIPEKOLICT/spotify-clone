@@ -1,15 +1,15 @@
-import { SocketEntity, SocketPlace } from '../../enums/external/data';
+import { SocketEntity, SocketPlace, SocketScope } from '../../enums/external/data';
 
 export type SocketAuth = {
-  userId: number;
+  userId: string;
   username: string;
 };
 
 export type SocketTarget = {
   place: SocketPlace;
   entity: SocketEntity;
-  entityId?: number;
-  userId?: number;
+  scope: SocketScope;
+  id: string;
 };
 
 export type SocketData = {

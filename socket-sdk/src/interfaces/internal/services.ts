@@ -2,10 +2,9 @@ import { SocketBroadcastEvent } from '../../types/external/events';
 import { SocketDataWithPayload, SocketTarget } from '../../types/external/data';
 import { SocketEvent } from '../../enums/external/events';
 import { SocketSubscriber, SocketSubscribeReturnType } from '../../types/external/functions';
-import { SocketScope } from '../../enums/internal/data';
 import { DynamicAPI } from '../../types/external/dynamic';
-import { SubscribeStrategy } from '../../types/internal/data';
 import { ISocketInterceptor } from '../external/custom';
+import { Strategy, StrategyCaseTarget } from '../../types/internal/strategy';
 
 export interface ISubjectService {
   subscribe<Payload extends object | undefined = undefined>(
@@ -16,9 +15,9 @@ export interface ISubjectService {
 
   unsubscribe<Payload extends object | undefined = undefined>(subscriber: SocketSubscriber<Payload>): void;
 
-  unsubscribeFromCaseAndEvent(event: SocketBroadcastEvent, target: SocketTarget, scope: SocketScope): void;
+  unsubscribeFromCaseAndEvent(event: SocketBroadcastEvent, target: StrategyCaseTarget): void;
 
-  unsubscribeFromCase(target: SocketTarget, scope: SocketScope): void;
+  unsubscribeFromCase(target: StrategyCaseTarget): void;
 
   unsubscribeAll(): void;
 
@@ -41,7 +40,7 @@ export interface IClientServiceInternal {
 }
 
 export interface IDynamicService {
-  generateModule(strategy: SubscribeStrategy): DynamicAPI;
+  generateModule(strategy: Strategy): DynamicAPI;
 }
 
 export interface IInterceptorService {

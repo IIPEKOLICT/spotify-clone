@@ -7,11 +7,11 @@ import { typeOrmModuleAsyncOptions } from './configs/typeorm.config';
 import { UserModule } from './app/user/user.module';
 import { AuthModule } from './app/auth/auth.module';
 import { CryptographyModule } from './app/cryptography/cryptography.module';
-import { StorageModule } from './app/storage/storage.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { serveStaticModuleOptions } from './configs/static.config';
 import { PostModule } from './app/post/post.module';
 import { SocketModule } from './app/global/socket/socket.module';
+import { FirebaseModule } from './app/firebase/firebase.module';
 
 @Module({
   imports: [
@@ -21,9 +21,9 @@ import { SocketModule } from './app/global/socket/socket.module';
     AuthModule,
     UserModule,
     CryptographyModule,
-    StorageModule,
     PostModule,
     SocketModule,
+    FirebaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

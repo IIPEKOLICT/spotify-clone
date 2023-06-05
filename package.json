@@ -13,12 +13,11 @@
     "socket-sdk:inject": "cd socket-sdk && npm i && npm run inject && cd ..",
     "client:dev": "cd client && npm run start",
     "client:prod": "cd client && npm run build",
-    "db": "docker-compose -p spotify-db --profile db up",
+    "db": "docker-compose -p spotify-db --profile db up --build",
     "client": "docker-compose -p spotify-client --profile client up --build",
     "server": "docker-compose -p spotify-server --profile server up --build",
     "socket-server": "docker-compose -p spotify-socket-server --profile socket-server up --build",
-    "dev": "docker-compose -p spotify-dev --profile dev up --build",
-    "prod": "docker-compose -p spotify-prod --profile prod up --build"
+    "dev": "docker-compose -p spotify-dev --profile dev up --build"
   },
   "devDependencies": {
     "prettier": "^2.8.8"

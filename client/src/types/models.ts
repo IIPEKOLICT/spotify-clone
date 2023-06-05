@@ -8,7 +8,7 @@ export type EntityModel = {
 };
 
 export type UserModel = EntityModel & {
-  id: number | null;
+  _id: string | null;
   firstName: string;
   lastName: string;
   email: string;

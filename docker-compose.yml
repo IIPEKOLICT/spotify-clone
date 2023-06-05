@@ -6,21 +6,16 @@ services:
       - 'db'
       - 'server'
       - 'dev'
-      - 'prod'
     restart: on-failure
-    image: postgres:latest
+    image: mongo:latest
     ports:
-      - '5432:5432'
+      - '27017:27017'
     volumes:
-      - db-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: dbname
+      - db-data:/data/db
     networks:
       - private
 
-  socket_server_dev:
+  socket_server:
     profiles:
       - 'socket-server'
       - 'server'
@@ -28,7 +23,6 @@ services:
     restart: on-failure
     build:
       context: ./socket-server
-      dockerfile: Dockerfile.dev
     ports:
       - '8888:8888'
     volumes:
@@ -42,27 +36,7 @@ services:
     networks:
       - private
 
-  socket_server_prod:
-    profiles:
-      - 'prod'
-    restart: on-failure
-    build:
-      context: ./socket-server
-      dockerfile: Dockerfile.prod
-    ports:
-      - '8888:8888'
-    volumes:
-      - ./socket-server:/app/socket-server
-    env_file:
-      - ./socket-server/.env
-    environment:
-      PORT: '8888'
-    depends_on:
-      - db
-    networks:
-      - private
-
-  server_dev:
+  server:
     profiles:
       - 'server'
       - 'dev'
@@ -81,7 +55,7 @@ services:
       NODE_ENV: 'development'
       PORT: '8000'
       SOCKET_SERVER_URL: 'ws://socket_server_dev:8888'
-      DATABASE_URL: 'postgres://user:password@db:5432/dbname'
+      DATABASE_URL: 'mongodb://db:27017/main'
     depends_on:
       - db
       - socket_server_dev
@@ -91,35 +65,7 @@ services:
     networks:
       - private
 
-  server_prod:
-    profiles:
-      - 'prod'
-    restart: on-failure
-    build:
-      context: ./server
-      dockerfile: Dockerfile.prod
-    ports:
-      - '8000:8000'
-    volumes:
-      - ./server:/app/server
-      - ./server/public:/app/public
-    env_file:
-      - ./server/.env
-    environment:
-      NODE_ENV: 'production'
-      PORT: '8000'
-      SOCKET_SERVER_URL: 'ws://socket_server_prod:8888'
-      DATABASE_URL: 'postgres://user:password@db:5432/dbname'
-    depends_on:
-      - db
-      - socket_server_prod
-    links:
-      - db
-      - socket_server_prod
-    networks:
-      - private
-
-  client_dev:
+  client:
     profiles:
       - 'client'
       - 'dev'
@@ -139,34 +85,6 @@ services:
       NODE_ENV: 'development'
       REACT_APP_API_URL: 'http://server_dev:8000'
       SOCKET_SERVER_URL: 'ws://socket_server_dev:8888'
-    networks:
-      - private
-
-  client_prod:
-    profiles:
-      - 'prod'
-    restart: on-failure
-    build:
-      context: ./client
-      dockerfile: Dockerfile.prod
-    ports:
-      - "3000:80"
-    volumes:
-      - ./client:/app/client
-    env_file:
-      - ./client/.env
-    environment:
-      CI: 'true'
-      NODE_ENV: 'production'
-      REACT_APP_API_URL: 'http://server_prod:8000'
-      SOCKET_SERVER_URL: 'ws://socket_server_prod:8888'
-    depends_on:
-      - db
-      - server_prod
-      - socket_server_prod
-    links:
-      - server_prod
-      - socket_server_prod
     networks:
       - private
 

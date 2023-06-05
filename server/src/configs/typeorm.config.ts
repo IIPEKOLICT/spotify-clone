@@ -4,11 +4,12 @@ import { EnvironmentModule } from '../app/global/environment/environment.module'
 
 const typeormModuleOptionsFactory = (environmentService: EnvironmentService): TypeOrmModuleOptions => {
   return {
-    type: 'postgres',
-    port: +environmentService.PORT,
+    type: 'mongodb',
     url: environmentService.DATABASE_URL,
     autoLoadEntities: true,
     synchronize: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
   };
 };
 

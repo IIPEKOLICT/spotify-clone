@@ -10,7 +10,7 @@ export class EnvironmentService {
   }
 
   get DATABASE_URL(): string {
-    return this.configService.get('DATABASE_URL') ?? 'postgres://user:password@db:5432/dbname';
+    return this.configService.get('DATABASE_URL') ?? 'mongodb://localhost:27017/main';
   }
 
   get JWT_SECRET(): string {
@@ -23,5 +23,21 @@ export class EnvironmentService {
 
   get SOCKET_SERVER_URL(): string {
     return this.configService.get('SOCKET_SERVER_URL') ?? 'ws://localhost:8888';
+  }
+
+  get GOOGLE_PROJECT_ID(): string {
+    return this.configService.getOrThrow('GOOGLE_PROJECT_ID');
+  }
+
+  get GOOGLE_PRIVATE_KEY(): string {
+    return this.configService.getOrThrow('GOOGLE_PRIVATE_KEY');
+  }
+
+  get GOOGLE_CLIENT_EMAIL(): string {
+    return this.configService.getOrThrow('GOOGLE_CLIENT_EMAIL');
+  }
+
+  get GOOGLE_BUCKET_NAME(): string {
+    return this.configService.getOrThrow('GOOGLE_BUCKET_NAME');
   }
 }

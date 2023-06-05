@@ -1,10 +1,13 @@
 import { SocketBroadcastEvent } from '../../types/external/events';
 import { IClientServiceInternal, IDynamicService, ISubjectService } from '../../interfaces/internal/services';
-import { SOCKET_BROADCAST_EVENTS } from '../../constants/internal/events';
-import { SocketScope } from '../../enums/internal/data';
 import { DynamicAPI } from '../../types/external/dynamic';
-import { SubscribeStrategy, SubscribeStrategyCase } from '../../types/internal/data';
-import { SocketSubscriber, SocketSubscribeReturnType } from '../../types/external/functions';
+import {
+  ExternalSocketSubscribeMethod,
+  SocketSubscriber,
+  SocketSubscribeReturnType,
+  VoidCallback,
+} from '../../types/external/functions';
+import { Strategy, StrategyCaseEventsMap, StrategyCaseTarget } from '../../types/internal/strategy';
 
 export class DynamicService implements IDynamicService {
   constructor(private readonly subject: ISubjectService, private readonly client: IClientServiceInternal) {}
@@ -17,80 +20,67 @@ export class DynamicService implements IDynamicService {
   }
 
   private generateSubscribeMethod = <Payload extends object | undefined>(
-    config: SubscribeStrategyCase<Payload>,
+    target: StrategyCaseTarget,
     event: SocketBroadcastEvent,
-  ) => {
-    const { place, entity, idField } = config;
-
-    return (id: number, subscriber: SocketSubscriber<Payload>): SocketSubscribeReturnType => {
-      return this.subject.subscribe<Payload>(event, { place, entity, [idField]: id }, subscriber);
+  ): ExternalSocketSubscribeMethod<Payload> => {
+    return (id: string, subscriber: SocketSubscriber<Payload>): SocketSubscribeReturnType => {
+      return this.subject.subscribe<Payload>(event, { ...target, id }, subscriber);
     };
   };
 
-  private generateUnsubscribeFromCaseAndEventMethod = <Payload extends object | undefined>(
-    config: SubscribeStrategyCase<Payload>,
+  private generateUnsubscribeFromCaseAndEventMethod = (
+    target: StrategyCaseTarget,
     event: SocketBroadcastEvent,
-  ) => {
-    const { place, entity, idField } = config;
-
+  ): VoidCallback => {
     return () => {
-      this.subject.unsubscribeFromCaseAndEvent(
-        event,
-        { place, entity },
-        idField === 'userId' ? SocketScope.USER : SocketScope.ENTITY,
-      );
+      this.subject.unsubscribeFromCaseAndEvent(event, target);
     };
   };
 
-  private generateUnsubscribeFromCaseMethod = <Payload extends object | undefined>(
-    config: SubscribeStrategyCase<Payload>,
-  ) => {
-    const { place, entity, idField } = config;
-
+  private generateUnsubscribeFromCaseMethod = (target: StrategyCaseTarget): VoidCallback => {
     return () => {
-      this.subject.unsubscribeFromCase({ place, entity }, idField === 'userId' ? SocketScope.USER : SocketScope.ENTITY);
+      this.subject.unsubscribeFromCase(target);
     };
   };
 
-  private generateTriggerMethod = <Payload extends object | undefined>(
-    config: SubscribeStrategyCase<Payload>,
+  private generateTriggerMethod = <Payload extends object | undefined = undefined>(
+    target: StrategyCaseTarget,
     event: SocketBroadcastEvent,
   ) => {
-    const { place, entity, idField } = config;
-
-    return (id: number, payload: Payload) => {
-      this.client.notify(event, { place, entity, [idField]: id }, payload);
+    return (id: string, payload: Payload) => {
+      this.client.notify(event, { ...target, id }, payload);
     };
   };
 
-  generateModule(strategy: SubscribeStrategy): DynamicAPI {
+  generateModule(strategy: Strategy): DynamicAPI {
     const module: DynamicAPI = {} as DynamicAPI;
 
     Object.keys(strategy).forEach((caseName: string) => {
       module[caseName] = {} as any;
 
-      SOCKET_BROADCAST_EVENTS.forEach((event: SocketBroadcastEvent) => {
-        const subscribeMethodName = `subscribeOn${DynamicService.capitalize(event)}Event`;
-        const subscribeMethod = this.generateSubscribeMethod(strategy[caseName], event);
+      const caseTarget: StrategyCaseTarget = strategy[caseName].target;
+      const eventsMap: StrategyCaseEventsMap = strategy[caseName].events;
+
+      Object.keys(eventsMap).forEach((event: SocketBroadcastEvent) => {
+        const capitalizedEventName: string = DynamicService.capitalize(event);
+
+        const subscribeMethodName = `subscribeOn${capitalizedEventName}Event`;
+        const subscribeMethod = this.generateSubscribeMethod(caseTarget, event);
 
         module[caseName][subscribeMethodName] = subscribeMethod.bind(this);
 
-        const unsubscribeFromCaseAndEventMethodName = `unsubscribeFromAll${DynamicService.capitalize(event)}EventRooms`;
-
-        const unsubscribeFromCaseAndEventMethod = this.generateUnsubscribeFromCaseAndEventMethod(
-          strategy[caseName],
-          event,
-        );
+        const unsubscribeFromCaseAndEventMethodName = `unsubscribeFromAll${capitalizedEventName}EventRooms`;
+        const unsubscribeFromCaseAndEventMethod = this.generateUnsubscribeFromCaseAndEventMethod(caseTarget, event);
 
         module[caseName][unsubscribeFromCaseAndEventMethodName] = unsubscribeFromCaseAndEventMethod.bind(this);
 
-        const triggerMethodName = `trigger${DynamicService.capitalize(event)}Event`;
-        const triggerMethod = this.generateTriggerMethod(strategy[caseName], event);
+        const triggerMethodName = `trigger${capitalizedEventName}Event`;
+        const triggerMethod = this.generateTriggerMethod(caseTarget, event);
 
         module[caseName][triggerMethodName] = triggerMethod.bind(this);
       });
 
-      const unsubscribeFromCaseMethod = this.generateUnsubscribeFromCaseMethod(strategy[caseName]);
+      const unsubscribeFromCaseMethod = this.generateUnsubscribeFromCaseMethod(caseTarget);
 
       module[caseName]['unsubscribeFromAllEvents'] = unsubscribeFromCaseMethod.bind(this);
     });
