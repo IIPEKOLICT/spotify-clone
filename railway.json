@@ -1,12 +1,12 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "watchPatterns": ["src/**"],
+    "watchPatterns": ["socket-server/src/**"],
     "builder": "NIXPACKS",
-    "buildCommand": "npm run build"
+    "buildCommand": "cd socket-server && npm run build && .."
   },
   "deploy": {
-    "startCommand": "npm run prod",
+    "startCommand": "cd socket-server && npm run prod",
     "healthcheckPath": "/status",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE"
