@@ -4,20 +4,20 @@ import { EnvironmentService } from './app/global/environment/environment.service
 import { injectSwaggerToApp } from './configs/swagger.config';
 import * as cookieParser from 'cookie-parser';
 import { INestApplication } from '@nestjs/common';
-import { corsOptions } from './configs/cors.config';
+import { corsOptionsFactory } from './configs/cors.config';
 import { initDatabaseHook } from './hooks/init-database.hook';
 
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule);
-  const PORT: string | number = app.get(EnvironmentService).PORT;
+  const environmentService: EnvironmentService = app.get(EnvironmentService);
 
   app.use(cookieParser());
-  app.enableCors(corsOptions);
+  app.enableCors(corsOptionsFactory(environmentService.FRONTEND_URL));
 
   injectSwaggerToApp(app);
 
-  await app.listen(PORT, () => {
-    initDatabaseHook(app).then(() => console.log(`Backend started at port ${PORT}`));
+  await app.listen(environmentService.PORT, () => {
+    initDatabaseHook(app).then(() => console.log(`Backend started at port ${environmentService.PORT}`));
   });
 }
 

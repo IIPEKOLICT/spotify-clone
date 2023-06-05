@@ -14,7 +14,6 @@ env:
   VERCEL_BACKEND_PROJECT_ID: '${{ secrets.VERCEL_BACKEND_PROJECT_ID }}'
 
   FRONTEND_URL: 'https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}'
-
   DATABASE_URL: '${{ secrets.DATABASE_URL }}'
   GOOGLE_PROJECT_ID: '${{ secrets.GOOGLE_PROJECT_ID }}'
   GOOGLE_PRIVATE_KEY: '${{ secrets.GOOGLE_PRIVATE_KEY }}'
@@ -45,8 +44,6 @@ jobs:
         run: 'cd server && npm i'
       - name: 'Build'
         run: 'cd server && npm run build'
-      - name: 'Omit dev dependencies'
-        run: 'cd server && npm i --omit=dev'
       - name: 'Deploy'
         uses: 'amondnet/vercel-action@v20'
         with:
@@ -63,7 +60,3 @@ jobs:
           vercel_project_id: '${{ env.VERCEL_BACKEND_PROJECT_ID }}'
       - name: 'Check build status'
         run: '[[ ${{ steps.backend-state.outputs.status }} == "READY" ]] && echo Success build! || exit 1'
-      - name: 'Show deploy url'
-        run: 'echo ${{ steps.backend-state.outputs.preview_url_origin }}'
-      - name: 'Show frontend url'
-        run: 'echo ${{ env.FRONTEND_URL }}'
