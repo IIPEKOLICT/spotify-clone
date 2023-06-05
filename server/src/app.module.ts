@@ -7,8 +7,6 @@ import { typeOrmModuleAsyncOptions } from './configs/typeorm.config';
 import { UserModule } from './app/user/user.module';
 import { AuthModule } from './app/auth/auth.module';
 import { CryptographyModule } from './app/cryptography/cryptography.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { serveStaticModuleOptions } from './configs/static.config';
 import { PostModule } from './app/post/post.module';
 import { SocketModule } from './app/global/socket/socket.module';
 import { FirebaseModule } from './app/firebase/firebase.module';
@@ -17,7 +15,6 @@ import { FirebaseModule } from './app/firebase/firebase.module';
   imports: [
     EnvironmentModule,
     TypeOrmModule.forRootAsync(typeOrmModuleAsyncOptions),
-    ServeStaticModule.forRoot(serveStaticModuleOptions),
     AuthModule,
     UserModule,
     CryptographyModule,

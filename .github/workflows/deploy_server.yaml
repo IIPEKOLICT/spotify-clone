@@ -44,6 +44,8 @@ jobs:
         run: 'cd server && npm i'
       - name: 'Build'
         run: 'cd server && npm run build'
+      - name: 'Omit dev dependencies'
+        run: 'cd server && npm i --omit=dev'
       - name: 'Deploy'
         uses: 'amondnet/vercel-action@v20'
         with:
