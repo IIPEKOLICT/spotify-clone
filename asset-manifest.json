@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.014b51a7.css",
+    "main.js": "/static/js/main.dbef08c8.js",
+    "static/media/montserrat-all-400-normal.woff": "/static/media/montserrat-all-400-normal.327fab0afc997a2d9b16.woff",
+    "static/media/russo-one-all-400-normal.woff": "/static/media/russo-one-all-400-normal.d077bcf73b1bb3fdcacf.woff",
+    "static/media/montserrat-latin-400-normal.woff2": "/static/media/montserrat-latin-400-normal.acb6629fe45c43ad5d8b.woff2",
+    "static/media/montserrat-latin-ext-400-normal.woff2": "/static/media/montserrat-latin-ext-400-normal.0204ec08a4b574088f02.woff2",
+    "static/media/montserrat-cyrillic-ext-400-normal.woff2": "/static/media/montserrat-cyrillic-ext-400-normal.bbf9e820a2563aac0d8b.woff2",
+    "static/media/montserrat-cyrillic-400-normal.woff2": "/static/media/montserrat-cyrillic-400-normal.e5c5c19c23e370a342c8.woff2",
+    "static/media/russo-one-latin-400-normal.woff2": "/static/media/russo-one-latin-400-normal.d973f367962785e06ddd.woff2",
+    "static/media/russo-one-cyrillic-400-normal.woff2": "/static/media/russo-one-cyrillic-400-normal.617bf411082776bf2261.woff2",
+    "static/media/russo-one-latin-ext-400-normal.woff2": "/static/media/russo-one-latin-ext-400-normal.5b078dd3fd594657af46.woff2",
+    "static/media/montserrat-vietnamese-400-normal.woff2": "/static/media/montserrat-vietnamese-400-normal.8f3f4c99eb0eeb5990f1.woff2",
+    "index.html": "/index.html",
+    "main.014b51a7.css.map": "/static/css/main.014b51a7.css.map",
+    "main.dbef08c8.js.map": "/static/js/main.dbef08c8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.014b51a7.css",
+    "static/js/main.dbef08c8.js"
+  ]
+}
