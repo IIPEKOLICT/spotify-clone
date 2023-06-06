@@ -12,7 +12,7 @@ async function bootstrap() {
   const environmentService: EnvironmentService = app.get(EnvironmentService);
 
   app.use(cookieParser());
-  app.enableCors(corsOptionsFactory(environmentService.FRONTEND_URL));
+  app.enableCors(corsOptionsFactory(environmentService.FRONTEND_ORIGIN));
 
   injectSwaggerToApp(app);
 

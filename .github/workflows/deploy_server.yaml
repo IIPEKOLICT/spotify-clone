@@ -13,7 +13,7 @@ env:
   VERCEL_BACKEND_ORGANIZATION_ID: '${{ secrets.VERCEL_BACKEND_ORGANIZATION_ID }}'
   VERCEL_BACKEND_PROJECT_ID: '${{ secrets.VERCEL_BACKEND_PROJECT_ID }}'
 
-  FRONTEND_URL: 'https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}'
+  FRONTEND_ORIGIN: 'https://${{ github.repository_owner }}.github.io'
   DATABASE_URL: '${{ secrets.DATABASE_URL }}'
   GOOGLE_PROJECT_ID: '${{ secrets.GOOGLE_PROJECT_ID }}'
   GOOGLE_PRIVATE_KEY: '${{ secrets.GOOGLE_PRIVATE_KEY }}'

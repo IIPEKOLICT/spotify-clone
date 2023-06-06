@@ -1,6 +1,6 @@
 {
   "server": [
-    "FRONTEND_URL",
+    "FRONTEND_ORIGIN",
     "DATABASE_URL",
     "GOOGLE_PROJECT_ID",
     "GOOGLE_PRIVATE_KEY",

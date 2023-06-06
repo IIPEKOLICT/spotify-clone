@@ -41,7 +41,7 @@ export class EnvironmentService {
     return this.configService.getOrThrow('GOOGLE_BUCKET_NAME');
   }
 
-  get FRONTEND_URL(): string {
-    return this.configService.get('FRONTEND_URL') ?? 'http://localhost:3000';
+  get FRONTEND_ORIGIN(): string {
+    return this.configService.get('FRONTEND_ORIGIN') ?? 'http://localhost:3000';
   }
 }

@@ -1,5 +1,4 @@
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
-import { EnvironmentService } from '../app/global/environment/environment.service';
 
 type StaticOrigin = boolean | string | RegExp | (string | RegExp)[];
 
@@ -17,8 +16,8 @@ const originMatcherFactory = (allowedOrigins: string[]): CorsOptions['origin'] =
   };
 };
 
-export const corsOptionsFactory = (frontendUrl: string): CorsOptions => {
-  const allowedOrigins: string[] = ['http://localhost', frontendUrl];
+export const corsOptionsFactory = (frontendOrigin: string): CorsOptions => {
+  const allowedOrigins: string[] = ['http://localhost', frontendOrigin];
 
   return {
     origin: originMatcherFactory(allowedOrigins),
