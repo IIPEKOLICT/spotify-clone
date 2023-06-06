@@ -33,7 +33,9 @@ export const useSockets = () => {
       client.onDestroy();
     },
     logout() {
-      client.logout();
+      if (client.isConnected) {
+        client.logout();
+      }
     },
   };
 
@@ -50,21 +52,13 @@ export const useSockets = () => {
     },
   };
 
-  const logout = () => {
-    if (client.isConnected) {
-      applicationScope.logout();
-    }
-  };
-
   useEffect(() => {
     hookScope.onInit();
     return () => hookScope.onDestroy();
   }, []);
 
   return {
-    onApplicationInit: () => applicationScope.onInit(),
-    onApplicationDestroy: () => applicationScope.onDestroy(),
-    logout,
+    ...applicationScope,
     ...client.dynamic,
   };
 };

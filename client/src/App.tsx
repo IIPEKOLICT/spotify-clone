@@ -22,13 +22,13 @@ function App() {
 
   useCancelSession();
 
-  const { onApplicationInit, onApplicationDestroy, logout } = useSockets();
+  const { onDestroy, onInit, logout } = useSockets();
 
-  useEffect(() => onApplicationDestroy, []);
+  useEffect(() => () => onDestroy(), []);
 
   useEffect(() => {
     if (userInfo?._id) {
-      onApplicationInit();
+      onInit();
     } else {
       logout();
     }
