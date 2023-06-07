@@ -4,6 +4,7 @@ import { userReducer } from '../slices/AuthSlice';
 import { notificationReducer } from '../slices/NotificationSlice';
 import { userAPI } from '../services/UserService';
 import { socketActions, socketName, socketReducer } from '../slices/SocketSlice';
+import { storageReducer } from '../slices/StorageSlice';
 
 const rootReducer = combineReducers({
   [authAPI.reducerPath]: authAPI.reducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   notification: notificationReducer,
   socket: socketReducer,
+  storage: storageReducer,
 });
 
 export const setupStore = () => {

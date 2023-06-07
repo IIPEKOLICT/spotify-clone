@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CryptographyService } from '../cryptography/cryptography.service';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { Request, Response } from 'express';
-import { Cookie } from '../../constants/enums';
+import { Cookie, HttpHeader } from '../../constants/enums';
 
 @Injectable()
 export class AuthService {
@@ -15,8 +15,24 @@ export class AuthService {
     private readonly cryptographyService: CryptographyService,
   ) {}
 
-  tryGetJwtTokenFromRequestCookies(request: Request): string | null {
-    return request.cookies[Cookie.ACCESS_TOKEN] ?? null;
+  tryGetJwtTokenFromRequest(request: Request): string | null {
+    const cookie: string | undefined = request.cookies[Cookie.ACCESS_TOKEN];
+
+    if (cookie) {
+      return cookie;
+    }
+
+    const header: string | string[] | undefined = request.headers[HttpHeader.AUTHORIZATION];
+
+    if (!header) {
+      return null;
+    }
+
+    if (typeof header === 'string') {
+      return header.split(' ')[1];
+    }
+
+    return header[0].split(' ')[1];
   }
 
   private generateToken(user: UserEntity): string {
@@ -24,12 +40,16 @@ export class AuthService {
     return this.jwtService.sign({ _id, createdAt });
   }
 
-  injectJwtTokenIntoResponseCookies(response: Response, user: UserEntity) {
-    response.cookie(Cookie.ACCESS_TOKEN, this.generateToken(user));
+  injectJwtTokenIntoResponse(response: Response, user: UserEntity) {
+    const token: string = this.generateToken(user);
+
+    response.cookie(Cookie.ACCESS_TOKEN, token);
+    response.setHeader(HttpHeader.AUTHORIZATION, `Bearer ${token}`);
   }
 
-  removeJwtTokenFromResponseCookies(response: Response) {
+  removeJwtTokenFromResponse(response: Response) {
     response.cookie(Cookie.ACCESS_TOKEN, '');
+    response.setHeader(HttpHeader.AUTHORIZATION, '');
   }
 
   async tryGetUserViaCredentials(email: string, password: string): Promise<UserEntity | undefined> {

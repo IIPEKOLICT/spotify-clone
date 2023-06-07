@@ -1,15 +1,12 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { REACT_APP_SERVER_URL } from '../constants/environment';
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 import { HttpMethod } from '../constants/enums';
 import { UpdateUserInfoRequestBody } from '../types/dto';
 import { UserModel } from '../types/models';
+import { fetchBaseQueryFactory } from './base';
 
 export const userAPI = createApi({
   reducerPath: 'userAPI',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${REACT_APP_SERVER_URL}/users`,
-    credentials: 'include',
-  }),
+  baseQuery: fetchBaseQueryFactory('users'),
   tagTypes: ['user'],
   endpoints: (build) => ({
     updateCurrentUserInfo: build.mutation<UserModel, UpdateUserInfoRequestBody>({

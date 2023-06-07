@@ -33,3 +33,11 @@ export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
 }
+
+export enum SessionStorageKey {
+  ACCESS_TOKEN = 'access-token',
+}
+
+export enum HttpHeader {
+  AUTHORIZATION = 'Authorization',
+}

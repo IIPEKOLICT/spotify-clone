@@ -35,7 +35,7 @@ export class AuthController {
       value: UserStatus.ONLINE,
     });
 
-    this.authService.injectJwtTokenIntoResponseCookies(response, updatedUser);
+    this.authService.injectJwtTokenIntoResponse(response, updatedUser);
     return this.userMapper.mapOne(updatedUser);
   }
 
@@ -52,7 +52,7 @@ export class AuthController {
       value: UserStatus.ONLINE,
     });
 
-    this.authService.injectJwtTokenIntoResponseCookies(response, updatedUser);
+    this.authService.injectJwtTokenIntoResponse(response, updatedUser);
     return this.userMapper.mapOne(updatedUser);
   }
 
@@ -71,7 +71,7 @@ export class AuthController {
     const user: UserEntity = await this.userService.create({ ...dto, status: UserStatus.ONLINE });
 
     this.socketService.dynamic.userStatusOnUserPage.triggerEditEvent(user.id.toString(), { value: UserStatus.ONLINE });
-    this.authService.injectJwtTokenIntoResponseCookies(response, user);
+    this.authService.injectJwtTokenIntoResponse(response, user);
     return this.userMapper.mapOne(user);
   }
 
@@ -89,7 +89,7 @@ export class AuthController {
       value: UserStatus.OFFLINE,
     });
 
-    this.authService.removeJwtTokenFromResponseCookies(response);
+    this.authService.removeJwtTokenFromResponse(response);
     return DefaultResponseDto.new();
   }
 
@@ -101,8 +101,6 @@ export class AuthController {
     @User() user: UserEntity,
     @Res({ passthrough: true }) response: Response,
   ): Promise<DefaultResponseDto> {
-    console.log(`User ${user.id} canceled session`);
-
     const updatedUser: UserEntity = await this.userService.updateById(user.id, {
       status: UserStatus.OFFLINE,
       lastActivityAt: new Date(),

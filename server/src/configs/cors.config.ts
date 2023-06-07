@@ -1,4 +1,5 @@
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { HttpHeader } from '../constants/enums';
 
 type StaticOrigin = boolean | string | RegExp | (string | RegExp)[];
 
@@ -22,5 +23,6 @@ export const corsOptionsFactory = (frontendOrigin: string): CorsOptions => {
   return {
     origin: originMatcherFactory(allowedOrigins),
     credentials: true,
+    exposedHeaders: [HttpHeader.AUTHORIZATION],
   };
 };

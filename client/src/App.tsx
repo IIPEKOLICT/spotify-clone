@@ -12,6 +12,7 @@ import { LoaderComponent } from './common/loader/LoaderComponent';
 import { useSockets } from './hooks/useSockets';
 import { useCancelSession } from './hooks/useCancelSession';
 import { UserModel } from './types/models';
+import { SessionStorageKey } from './constants/enums';
 
 function App() {
   const [refresh, { data, isSuccess, isLoading }] = authAPI.useRefreshTokenMutation();
@@ -36,7 +37,9 @@ function App() {
 
   useEffect(() => {
     const cookie = document.cookie;
-    cookie && refresh();
+    const header: string | null = sessionStorage.getItem(SessionStorageKey.ACCESS_TOKEN);
+
+    (cookie || header) && refresh();
   }, [refresh]);
 
   useEffect(() => {

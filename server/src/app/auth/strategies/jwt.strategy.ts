@@ -12,7 +12,7 @@ import { UnauthorizedError } from '../../../errors/unauthorized.error';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly environmentService: EnvironmentService, private readonly authService: AuthService) {
     super({
-      jwtFromRequest: authService.tryGetJwtTokenFromRequestCookies,
+      jwtFromRequest: authService.tryGetJwtTokenFromRequest,
       ignoreExpiration: JWT_IGNORE_EXPIRATION,
       secretOrKey: environmentService.JWT_SECRET,
     });

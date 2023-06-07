@@ -1,15 +1,12 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { REACT_APP_SERVER_URL } from '../constants/environment';
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 import { CreateUserRequestBody, LoginRequestBody } from '../types/dto';
 import { UserModel } from '../types/models';
 import { HttpMethod } from '../constants/enums';
+import { fetchBaseQueryWithAuthInterceptorFactory } from './base';
 
 export const authAPI = createApi({
   reducerPath: 'authAPI',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${REACT_APP_SERVER_URL}/auth`,
-    credentials: 'include',
-  }),
+  baseQuery: fetchBaseQueryWithAuthInterceptorFactory('auth'),
   tagTypes: ['user'],
   endpoints: (build) => ({
     refreshToken: build.mutation<UserModel, void>({
@@ -43,7 +40,7 @@ export const authAPI = createApi({
     }),
     cancelSession: build.mutation<void, void>({
       query: () => ({
-        url: '/logout',
+        url: '/cancel-session',
         method: HttpMethod.POST,
       }),
     }),
