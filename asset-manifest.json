@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "spotify/static/css/main.aa27e6e3.css",
-    "main.js": "spotify/static/js/main.fdee8510.js",
-    "static/media/montserrat-all-400-normal.woff": "spotify/static/media/montserrat-all-400-normal.327fab0afc997a2d9b16.woff",
-    "static/media/russo-one-all-400-normal.woff": "spotify/static/media/russo-one-all-400-normal.d077bcf73b1bb3fdcacf.woff",
-    "static/media/montserrat-latin-400-normal.woff2": "spotify/static/media/montserrat-latin-400-normal.acb6629fe45c43ad5d8b.woff2",
-    "static/media/montserrat-latin-ext-400-normal.woff2": "spotify/static/media/montserrat-latin-ext-400-normal.0204ec08a4b574088f02.woff2",
-    "static/media/montserrat-cyrillic-ext-400-normal.woff2": "spotify/static/media/montserrat-cyrillic-ext-400-normal.bbf9e820a2563aac0d8b.woff2",
-    "static/media/montserrat-cyrillic-400-normal.woff2": "spotify/static/media/montserrat-cyrillic-400-normal.e5c5c19c23e370a342c8.woff2",
-    "static/media/russo-one-latin-400-normal.woff2": "spotify/static/media/russo-one-latin-400-normal.d973f367962785e06ddd.woff2",
-    "static/media/russo-one-cyrillic-400-normal.woff2": "spotify/static/media/russo-one-cyrillic-400-normal.617bf411082776bf2261.woff2",
-    "static/media/russo-one-latin-ext-400-normal.woff2": "spotify/static/media/russo-one-latin-ext-400-normal.5b078dd3fd594657af46.woff2",
-    "static/media/montserrat-vietnamese-400-normal.woff2": "spotify/static/media/montserrat-vietnamese-400-normal.8f3f4c99eb0eeb5990f1.woff2",
-    "index.html": "spotify/index.html",
-    "main.aa27e6e3.css.map": "spotify/static/css/main.aa27e6e3.css.map",
-    "main.fdee8510.js.map": "spotify/static/js/main.fdee8510.js.map"
+    "main.css": "https://not-yumasoft.github.io/spotify/static/css/main.c3436c40.css",
+    "main.js": "https://not-yumasoft.github.io/spotify/static/js/main.f3518dd0.js",
+    "static/media/montserrat-all-400-normal.woff": "https://not-yumasoft.github.io/spotify/static/media/montserrat-all-400-normal.327fab0afc997a2d9b16.woff",
+    "static/media/russo-one-all-400-normal.woff": "https://not-yumasoft.github.io/spotify/static/media/russo-one-all-400-normal.d077bcf73b1bb3fdcacf.woff",
+    "static/media/montserrat-latin-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/montserrat-latin-400-normal.acb6629fe45c43ad5d8b.woff2",
+    "static/media/montserrat-latin-ext-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/montserrat-latin-ext-400-normal.0204ec08a4b574088f02.woff2",
+    "static/media/montserrat-cyrillic-ext-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/montserrat-cyrillic-ext-400-normal.bbf9e820a2563aac0d8b.woff2",
+    "static/media/montserrat-cyrillic-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/montserrat-cyrillic-400-normal.e5c5c19c23e370a342c8.woff2",
+    "static/media/russo-one-latin-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/russo-one-latin-400-normal.d973f367962785e06ddd.woff2",
+    "static/media/russo-one-cyrillic-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/russo-one-cyrillic-400-normal.617bf411082776bf2261.woff2",
+    "static/media/russo-one-latin-ext-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/russo-one-latin-ext-400-normal.5b078dd3fd594657af46.woff2",
+    "static/media/montserrat-vietnamese-400-normal.woff2": "https://not-yumasoft.github.io/spotify/static/media/montserrat-vietnamese-400-normal.8f3f4c99eb0eeb5990f1.woff2",
+    "index.html": "https://not-yumasoft.github.io/spotify/index.html",
+    "main.c3436c40.css.map": "https://not-yumasoft.github.io/spotify/static/css/main.c3436c40.css.map",
+    "main.f3518dd0.js.map": "https://not-yumasoft.github.io/spotify/static/js/main.f3518dd0.js.map"
   },
   "entrypoints": [
-    "static/css/main.aa27e6e3.css",
-    "static/js/main.fdee8510.js"
+    "static/css/main.c3436c40.css",
+    "static/js/main.f3518dd0.js"
   ]
 }
