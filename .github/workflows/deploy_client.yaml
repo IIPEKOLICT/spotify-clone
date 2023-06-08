@@ -8,6 +8,7 @@ on:
       - 'client/**'
 
 env:
+  PUBLIC_URL: '.'
   REACT_APP_SERVER_URL: '${{ secrets.BACKEND_URL }}'
   REACT_APP_SOCKET_SERVER_URL: '${{ secrets.SOCKET_SERVER_URL }}'
 
@@ -29,7 +30,8 @@ jobs:
         run: 'cd client && npm run build'
         env:
           NODE_ENV: 'production'
-      - name: 'Setup Git'
-        run: 'chmod +x scripts/setup_git.sh && scripts/setup_git.sh'
       - name: 'Deploy'
-        run: 'cd client && npm run deploy'
+        uses: 'peaceiris/actions-gh-pages@v3'
+        with:
+          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          publish_dir: './client/build'
