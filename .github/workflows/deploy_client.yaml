@@ -29,5 +29,7 @@ jobs:
         run: 'cd client && npm run build'
         env:
           NODE_ENV: 'production'
+      - name: 'Setup Git'
+        run: 'chmod +x scripts/setup_git.sh && scripts/setup_git.sh'
       - name: 'Deploy'
         run: 'cd client && npm run deploy'
