@@ -11,13 +11,11 @@ import { AlertComponent } from './common/alert/AlertComponent';
 import { LoaderComponent } from './common/loader/LoaderComponent';
 import { useSockets } from './hooks/useSockets';
 import { useCancelSession } from './hooks/useCancelSession';
-import { UserModel } from './types/models';
-import { SessionStorageKey } from './constants/enums';
 
 function App() {
   const [refresh, { data, isSuccess, isLoading }] = authAPI.useRefreshTokenMutation();
-  const { addUser, addNotification } = useActions();
-  const userInfo = useAppSelector((state) => state.user as UserModel | undefined);
+  const { setUser, addNotification, setAccessToken } = useActions();
+  const userInfo = useAppSelector((state) => state.auth.user);
   const notification = useAppSelector((state) => state.notification);
   const [showNotification, setShowNotification] = useState(false);
 
@@ -25,7 +23,9 @@ function App() {
 
   const { onDestroy, onInit, logout } = useSockets();
 
-  useEffect(() => () => onDestroy(), []);
+  useEffect(() => {
+    return () => onDestroy();
+  }, []);
 
   useEffect(() => {
     if (userInfo?._id) {
@@ -36,15 +36,13 @@ function App() {
   }, [userInfo]);
 
   useEffect(() => {
-    const cookie = document.cookie;
-    const header: string | null = sessionStorage.getItem(SessionStorageKey.ACCESS_TOKEN);
-
-    (cookie || header) && refresh();
+    setAccessToken();
+    refresh();
   }, [refresh]);
 
   useEffect(() => {
-    isSuccess && data && addUser(data);
-  }, [addUser, data, isSuccess]);
+    isSuccess && data && setUser(data);
+  }, [setUser, data, isSuccess]);
   useEffect(() => {
     setShowNotification(!!(notification?.message && notification?.type));
   }, [notification, addNotification]);

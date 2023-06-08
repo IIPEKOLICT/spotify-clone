@@ -8,7 +8,6 @@ on:
       - 'client/**'
 
 env:
-  PUBLIC_URL: 'https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}'
   REACT_APP_SERVER_URL: '${{ secrets.BACKEND_URL }}'
   REACT_APP_SOCKET_SERVER_URL: '${{ secrets.SOCKET_SERVER_URL }}'
 
@@ -27,11 +26,8 @@ jobs:
       - name: 'Install dependencies'
         run: 'cd client && npm i'
       - name: 'Build'
-        run: 'cd client && npm run build:craco'
+        run: 'cd client && npm run build'
         env:
           NODE_ENV: 'production'
       - name: 'Deploy'
-        uses: 'peaceiris/actions-gh-pages@v3'
-        with:
-          github_token: '${{ secrets.GITHUB_TOKEN }}'
-          publish_dir: './client/build'
+        run: 'cd client && npm run deploy'

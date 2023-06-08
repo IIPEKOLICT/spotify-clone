@@ -8,7 +8,7 @@ import {
 import { REACT_APP_SERVER_URL } from '../../constants/environment';
 import { RootState } from '../../store/store';
 import { HttpHeader, SessionStorageKey } from '../../constants/enums';
-import { storageActions } from '../../slices/StorageSlice';
+import { authActions } from '../../slices/AuthSlice';
 
 export const fetchBaseQueryFactory = (route: string, responseInterceptor?: (response: Response) => void) => {
   return fetchBaseQuery({
@@ -16,7 +16,7 @@ export const fetchBaseQueryFactory = (route: string, responseInterceptor?: (resp
     credentials: 'include',
     prepareHeaders: (headers: Headers, { getState }) => {
       const {
-        storage: { accessToken },
+        auth: { accessToken },
       } = getState() as RootState;
 
       if (accessToken) {
@@ -41,7 +41,7 @@ export const fetchBaseQueryWithAuthInterceptorFactory = (
       if (response.headers.has(HttpHeader.AUTHORIZATION)) {
         const header: string = response.headers.get(HttpHeader.AUTHORIZATION);
 
-        api.dispatch(storageActions.setAccessToken(header));
+        api.dispatch(authActions.setAccessToken(header));
         sessionStorage.setItem(SessionStorageKey.ACCESS_TOKEN, header);
       }
     };

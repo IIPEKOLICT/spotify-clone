@@ -1,4 +1,4 @@
-import { FC, useEffect, createElement } from 'react';
+import { FC, useEffect, createElement, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavbarComponent } from '../../navbar/NavbarComponent';
 import { ProfileComponent } from '../../profile/ProfileComponent';
@@ -8,37 +8,37 @@ import { FriendsComponent } from '../../friends/FriendsComponent';
 import { MusicComponent } from '../../music/MusicComponent';
 import { VideosComponent } from '../../videos/VideosComponent';
 import { PhotosComponent } from '../../photos/PhotosComponent';
+import { RoutePath } from '../../constants/enums';
 
 interface IProps {
-  page: string,
+  route: RoutePath;
+}
+
+type ComponentsMatcher = {
+  [route in RoutePath]?: ReactElement;
 };
 
-const components: any = {
-  "profile": <ProfileComponent />,
-  "news": <NewsComponent />,
-  "messenger": <MessengerComponent />,
-  "friends": <FriendsComponent />,
-  "music": <MusicComponent />,
-  "videos": <VideosComponent />,
-  "photos": <PhotosComponent />,
+const components: ComponentsMatcher = {
+  [RoutePath.PROFILE]: <ProfileComponent />,
+  [RoutePath.NEWS]: <NewsComponent />,
+  [RoutePath.MESSENGER]: <MessengerComponent />,
+  [RoutePath.FRIENDS]: <FriendsComponent />,
+  [RoutePath.MUSIC]: <MusicComponent />,
+  [RoutePath.VIDEOS]: <VideosComponent />,
+  [RoutePath.PHOTOS]: <PhotosComponent />,
 };
 
-const component = (name: string) => createElement(
-  "div",
-  { style: { width: "100%", height: "100%" } },
-  components[name],
-);
+const component = (name: string) =>
+  createElement('div', { style: { width: '100%', height: '100%' } }, components[name]);
 
-export const HomePage: FC<IProps> = ({ page }) => {
+export const HomePage: FC<IProps> = ({ route }) => {
   const navigate = useNavigate();
   useEffect(() => {
-    navigate(`/${page}`);
-  }, [navigate, page]);
+    navigate(route);
+  }, [navigate, route]);
   return (
-    <NavbarComponent active={page}>
-      <NavbarComponent.Slot name="content">
-        {component(page)}
-      </NavbarComponent.Slot>
+    <NavbarComponent active={route}>
+      <NavbarComponent.Slot name="content">{component(route)}</NavbarComponent.Slot>
     </NavbarComponent>
   );
 };

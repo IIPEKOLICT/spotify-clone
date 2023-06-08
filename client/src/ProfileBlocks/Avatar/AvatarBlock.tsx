@@ -7,17 +7,17 @@ import { useUserStatus } from '../../hooks/useUserStatus';
 import { Circle } from '@mui/icons-material';
 import { UserStatus } from '@yumasoft-spotify/socket-sdk';
 import { useAppSelector } from '../../hooks/redux';
-import { UserModel } from '../../types/models';
+import { DynamicRoute } from '../../routes';
 
 interface IProps {}
 
 export const AvatarBlock: FC<IProps> = (_) => {
-  const user = useAppSelector<UserModel>((state) => state.user as UserModel);
+  const user = useAppSelector((state) => state.auth.user);
   const { status } = useUserStatus(user);
   const navigate = useNavigate();
 
   const clickEditProfile = () => {
-    navigate(`/profile/${user._id}`);
+    navigate(DynamicRoute.profile(user._id));
   };
 
   return (

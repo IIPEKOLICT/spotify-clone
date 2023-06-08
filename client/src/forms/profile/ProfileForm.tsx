@@ -22,7 +22,7 @@ type Inputs = {
 export const ProfileForm: FC<IProps> = ({ type }) => {
   const { control, handleSubmit } = useForm<Inputs>();
   const [updateUser, { isSuccess, isLoading, data }] = userAPI.useUpdateCurrentUserInfoMutation();
-  const { addNotification, addUser } = useActions();
+  const { addNotification, setUser } = useActions();
 
   //   useEffect(() => {
   //     if (success_up || success_in) {

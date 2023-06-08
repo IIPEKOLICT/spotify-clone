@@ -36,7 +36,9 @@
     "eject": "react-scripts eject",
     "start:craco": "craco start",
     "test:craco": "craco test",
-    "build:craco": "craco build"
+    "build:craco": "craco build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -67,6 +69,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "craco-swc": "^0.5.1",
+    "gh-pages": "^5.0.0",
     "node-sass": "^7.0.3",
     "react-scripts": "5.0.1",
     "sass": "^1.62.1",

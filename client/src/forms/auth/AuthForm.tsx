@@ -27,15 +27,15 @@ export const AuthForm: FC<IProps> = ({ type }) => {
   const [signIn, { isSuccess: success_in, isLoading: loading_in, data: data_in }] = authAPI.useSignInMutation();
   const [signUp, { isSuccess: success_up, isLoading: loading_up, data: data_up }] = authAPI.useSignUpMutation();
 
-  const { addNotification, addUser } = useActions();
+  const { addNotification, setUser } = useActions();
 
   useEffect(() => {
     if (success_up || success_in) {
-      data_in && addUser(data_in);
-      data_up && addUser(data_up);
+      data_in && setUser(data_in);
+      data_up && setUser(data_up);
       addNotification({ type: 'success', message: 'User authorization was successful' });
     }
-  }, [success_in, success_up, addUser, addNotification, data_in, data_up]);
+  }, [success_in, success_up, setUser, addNotification, data_in, data_up]);
 
   const onSubmitLogin: SubmitHandler<Inputs> = ({ onSubmit, ...fields }) => signIn(fields);
   const onSubmitRegistration: SubmitHandler<Inputs> = ({ onSubmit, ...fields }) => signUp(fields);

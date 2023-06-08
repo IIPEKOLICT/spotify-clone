@@ -29,6 +29,16 @@ export enum RoutePath {
   DEFAULT = '*',
 }
 
+export enum NavItem {
+  PROFILE = 'Profile',
+  NEWS = 'News',
+  MESSENGER = 'Messenger',
+  FRIENDS = 'Friends',
+  PHOTOS = 'Photos',
+  MUSIC = 'Music',
+  VIDEOS = 'Videos',
+}
+
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',

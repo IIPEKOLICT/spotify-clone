@@ -9,19 +9,25 @@ interface IProps {
 }
 
 export const Routes: FC<IProps> = ({ isAuth }) => {
+  const navRoutes: RoutePath[] = [
+    RoutePath.PROFILE,
+    RoutePath.NEWS,
+    RoutePath.MESSENGER,
+    RoutePath.FRIENDS,
+    RoutePath.PHOTOS,
+    RoutePath.MUSIC,
+    RoutePath.VIDEOS,
+  ];
+
   const authPath = () => {
     return (
       <Switch>
-        <Route path={RoutePath.HOME} element={<HomePage page={"news"} />} />
-        <Route path={RoutePath.PROFILE} element={<HomePage page={"profile"} />} />
-        <Route path={RoutePath.NEWS} element={<HomePage page={"news"} />} />
-        <Route path={RoutePath.MESSENGER} element={<HomePage page={"messenger"} />} />
-        <Route path={RoutePath.FRIENDS} element={<HomePage page={"friends"} />} />
-        <Route path={RoutePath.PHOTOS} element={<HomePage page={"photos"} />} />
-        <Route path={RoutePath.MUSIC} element={<HomePage page={"music"} />} />
-        <Route path={RoutePath.VIDEOS} element={<HomePage page={"videos"} />} />
+        <Route path={RoutePath.HOME} element={<HomePage route={RoutePath.NEWS} />} />
+        {navRoutes.map((route: RoutePath, index: number) => (
+          <Route key={index.toString()} path={route} element={<HomePage route={route} />} />
+        ))}
         <Route path={RoutePath.USER} element={<ProfileForm />} />
-        <Route path={RoutePath.DEFAULT} element={<HomePage page={"news"} />} />
+        <Route path={RoutePath.DEFAULT} element={<HomePage route={RoutePath.NEWS} />} />
       </Switch>
     );
   };

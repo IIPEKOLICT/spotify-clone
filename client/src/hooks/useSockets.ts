@@ -1,5 +1,4 @@
 import { useAppSelector } from './redux';
-import { UserModel } from '../types/models';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { SocketClient, SocketSubscribeReturnType, ISocketInterceptor } from '@yumasoft-spotify/socket-sdk';
 import { REACT_APP_SOCKET_SERVER_URL } from '../constants/environment';
@@ -12,7 +11,7 @@ const client = new SocketClient(REACT_APP_SOCKET_SERVER_URL, {
 
 export const useSockets = () => {
   const currentInstanceId = useAppSelector((state) => Object.keys(state.socket.hookInstances).length + 1);
-  const user = useAppSelector((state) => state.user as UserModel | undefined);
+  const user = useAppSelector((state) => state.auth.user);
 
   const [instanceId, setInstanceId] = useState<number>(-1);
 

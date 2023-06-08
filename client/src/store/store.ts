@@ -1,18 +1,16 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { authAPI } from '../services/AuthService';
-import { userReducer } from '../slices/AuthSlice';
+import { authReducer } from '../slices/AuthSlice';
 import { notificationReducer } from '../slices/NotificationSlice';
 import { userAPI } from '../services/UserService';
 import { socketActions, socketName, socketReducer } from '../slices/SocketSlice';
-import { storageReducer } from '../slices/StorageSlice';
 
 const rootReducer = combineReducers({
   [authAPI.reducerPath]: authAPI.reducer,
   [userAPI.reducerPath]: userAPI.reducer,
-  user: userReducer,
+  auth: authReducer,
   notification: notificationReducer,
   socket: socketReducer,
-  storage: storageReducer,
 });
 
 export const setupStore = () => {
