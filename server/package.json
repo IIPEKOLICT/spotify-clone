@@ -2,7 +2,6 @@
   "name": "server",
   "version": "1.0.0",
   "description": "yumasoft-spotify server",
-  "author": "",
   "private": true,
   "license": "MIT",
   "scripts": {

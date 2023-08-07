@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://not-yumasoft.github.io/spotify",
   "description": "Yumasoft-spotify client",
-  "author": "Ebuchiy bredact",
   "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.10.8",
